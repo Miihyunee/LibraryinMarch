@@ -1,0 +1,155 @@
+$(function() {
+	//changeView();
+	//let view = $('input[name="viewOpt"]:checked').val();
+	/* $(function() {
+		$("input[type='text']").keydown(function(){
+			if(event.keyCode===13){
+				event.preventDefault();
+			}
+		});
+	}); */
+	
+	/* $("#btnSearch").click(function() {
+	    let keyword	= $("input[name=keyword]");
+	    let view	= $("input[name=viewOpt]").val();
+		//if(formCheck()){
+			//let params={"keyword":keyword.val(), "view":view, "option":option};
+			let params={"keyword":keyword.val(), "view":view};
+			$.ajax({
+				url:"/syLibrary/search_servlet/search.do",
+				data:params,
+				success:function(txt){
+					$("#section-result").html(txt);
+				}
+			});	
+		//}
+	}); */
+	$("#btnSearch").click(function() {
+		let form1 = $("form[name=form1]");
+        let keyword	= $("input[name=keyword]");
+		let view	= $("input[name=viewOpt]").val();
+		if(keyword.val() == "" || keyword.val().trim().length==0 ){
+			alert("검색어를 입력해주세요");
+			$('#keyword').val("");
+			keyword.focus();
+			return false;
+		}
+		form1.submit();
+    });
+
+	// 상세검색 처리 코드
+	$("#btnDetail").click(function() {
+		let form2 = $("form[name=form2]");
+	    let b_name	= $("input[name=b_name]");
+	    let b_author= $("input[name=b_author]");
+	    let b_pub	= $("input[name=b_pub]");
+	    let view	= $("input[name=viewOpt]").val();
+	    if(b_name.val()=="" && b_author.val()=="" && b_pub.val()==""){
+    		alert("검색어를 입력해주세요");
+    		b_name.focus();
+    		return false;
+	    }
+	    form2.submit();
+	}); 
+
+	// 상세검색창 토글버튼
+	$("#btnShow").click(function() {
+		$(".searchForm").slideDown("fast");
+		$("#btnShow").hide();
+		$("#btnHide").show();
+	});
+	$("#btnHide").click(function() {
+		$(".searchForm").slideUp("fast");
+		$("#btnShow").show();
+		$("#btnHide").hide();
+	});
+});
+
+function moveTo(page){
+	let keyword=$("#keyword");
+	let option=$("#option").val();
+	let view = $('input[name="viewOpt"]:checked').val(); // 검색결과목록 뷰 타입 설정
+	console.log("[search.jsp] moveTo: "+page+option);	
+	
+	/* if(keyword.val() == "" || keyword.val().trim().length==0 ){
+	if(keyword.val() == "" || keyword.val().trim().length==0 ){
+		alert("검색어를 입력해주세요");
+		keyword.focus();
+		return;
+	} */
+	$.ajax({
+		url:"/syLibrary/search_servlet/moveTo.do",
+		data:{"keyword":keyword.val(), "view":view, "page":page, "option":option},
+		success:function(txt){
+			console.log("[success]"+page+option);
+			$("#section-result").html(txt);
+		}
+	});	
+}
+
+function changeView() {
+	console.log("[뷰 전환 이벤트 test]");
+	let view = $('input[name="viewOpt"]:checked').val();
+	$('input[name="viewOpt"]').on('click', function(){
+		if($(this).val() != view){
+			console.log("[changeView] 이전값: " + view);
+			view = $(this).val();
+			console.log("[changeView] chked 변경: " + view);
+			/*
+			if(chked) {
+				console.log("changeView()] value : "+value);
+				console.log("changeView()] chked : "+chked);
+				confirm(value+chked);*/
+		}
+	});
+}
+
+/* function formCheck() {
+    let form1 = $("form[name=form1]");
+    let form2 = $("form[name=form2]");
+    let keyword	= $("input[name=keyword]");
+    let b_name	= $("input[name=b_name]");
+    let b_author= $("input[name=b_author]");
+    let b_pub	= $("input[name=b_pub]");
+    let option	= $("input[name=option]").val();
+    let view	= $("input[name=viewOpt]").val();
+    
+    if(form1.requestSubmit){
+		if(keyword.val() == "" || keyword.val().trim().length==0 ){
+			alert("검색어를 입력해주세요");
+			$('#keyword').val("");
+			keyword.focus();
+			return false;
+		}
+		//form1.submit();
+    }
+	if(form2.requestSubmit) {
+    	if(b_name.val()=="" && b_author.val()=="" && b_pub.val()==""){
+    		alert("검색어를 입력해주세요");
+    		b_name.focus();
+    		return false;
+    	}
+    	//form2.submit();
+    } 
+}	 */
+
+function collapse(element) {
+	var content = element.nextElementSibling;
+	element.classList.toggle("active");         // 활성화 여부 toggle
+	
+	if (content.style.maxHeight != 0) {         // 버튼 다음 요소가 펼쳐져 있으면
+		content.style.maxHeight = null;         // 접기
+	} else {
+		content.style.maxHeight = content.scrollHeight + "px";  // 접혀있는 경우 펼치기
+	}
+}
+
+$(function() {	
+	$("#btnChkout").click(function() {
+		/* 대출하기 */
+	});
+	
+	$("#btnReserv").click(function() {
+		/* 예약하기 */
+	});
+});

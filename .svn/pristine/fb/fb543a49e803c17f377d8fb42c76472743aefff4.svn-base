@@ -1,0 +1,66 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<jsp:include page="../common/header.jsp"></jsp:include>
+<head>
+<meta charset="UTF-8">
+<script src="http://code.jquery.com/jquery-3.7.1.js"></script>
+</head>
+<body>
+	<div class="container-fluid" id="menubar">
+		<ul class="nav nav-underline" id="title">
+			<li class="nav-item"><a class="nav-link" aria-current="page"
+				href="/syLibrary/user/book/search.jsp">&nbsp;&nbsp;&nbsp;자료찾기&nbsp;&nbsp;&nbsp;</a>
+			</li>
+			<li class="nav-item"><a class="nav-link active"
+				href="/syLibrary/user/book/myLibrary.jsp">&nbsp;&nbsp;&nbsp;나의서재&nbsp;&nbsp;&nbsp;</a>
+			</li>
+			<li class="nav-item"><a class="nav-link" href="/syLibrary/user/common/guide.jsp">&nbsp;&nbsp;&nbsp;이용안내&nbsp;&nbsp;&nbsp;</a>
+			</li>
+		</ul>
+	</div>
+	<div class="container"
+		style="float: none; margin: 0 auto; margin-top: 3em">
+		<h5>나의 대출 이력 : ${myHistory[0].lo_book_cnt} 건</h5>
+		<hr>
+		<ul>
+			<c:forEach var="myHisList" items="${myHistory}">
+				<li>
+					<div class="myHisList mb-4">
+						<div class="col col-md-auto thumb">
+							<img src="${myHisList.b_url}"
+								style="width: 150px; height: 200px;">
+						</div>
+						<div class="col col-md-auto state">
+							<dt calss="title" style="font-size: 1.3em;">${myHisList.b_name}</dt>
+							<dd class="author">
+								<span>작가 : ${myHisList.b_author} </span><span>출판사 :
+									${myHisList.b_pub} </span> <span>발행연도 : ${myHisList.b_year}</span>
+							</dd>
+							<dd class="data">
+								<span>도서분류 : ${myHisList.b_category} </span><span>ISBN :
+									${myHisList.b_isbn} </span>
+								<%-- <span>발행연도 : ${myHisList.b_year}</span> --%>
+							</dd>
+							<dd class="myState">
+								<span>대출일 : ${myHisList.l_lodate} </span>
+								<c:if test="${myHisList.l_complete ne null}">
+									<span> 반납일 : ${myHisList.l_complete} </span>
+								</c:if>
+								<c:if test="${myHisList.l_complete eq null}">
+									<span> 반납예정일 : ${myHisList.l_retdate} </span>
+								</c:if>
+								<%-- <span>발행연도 : ${myHisList.b_year}</span> --%>
+							</dd>
+						</div>
+
+					</div>
+				</li>
+			</c:forEach>
+		</ul>
+		<!-- 페이지 유틸 추가 -->
+	</div>
+</body>
+</html>

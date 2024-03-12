@@ -1,0 +1,104 @@
+package checkout;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+
+import admin.book.BookDTO;
+import sqlmap.MybatisManager;
+
+public class CheckoutDAO {
+	//CheckoutDAO dao=new CheckoutDAO();
+
+	// (b_id 1개 당)도서 대여가능여부(소장상태): 대여가능(비치중) or 대여불가 (boolean/String)
+	public boolean isAvailable(int b_id) {
+		SqlSession session = null;
+		boolean state = true;
+		System.out.println("isAvailable = "+b_id);
+		try {
+			session = MybatisManager.getInstance().openSession();
+			int b_amount=3;
+			int loCount= session.selectOne("checkout.loCount", b_id);
+			System.out.println("확인 loCount = "+loCount);
+			if (b_amount-loCount==0 ) {
+				state = false;
+				System.out.println("[isAvailable if문]"+b_id+" & "+loCount+" & "+state);
+			} else {
+				state = true;
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			if (session != null)
+				session.close();
+		}
+		return state;
+	}
+
+	// 검색도서목록, 대여가능여부 리스트
+	public List listState(List<BookDTO> list) {
+		SqlSession session = null;
+		List stateList = new ArrayList<>();
+		System.out.println("listState = "+list);
+		try {
+			session = MybatisManager.getInstance().openSession();
+			CheckoutDAO dao=new CheckoutDAO();
+			for (BookDTO dto : list) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("b_id", dto.getB_id());
+				
+				boolean state = dao.isAvailable(dto.getB_id());
+				map.put("state", state);
+				
+				stateList.add(map);
+				System.out.println("테스트 for listState = "+state);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return stateList;
+	}
+
+	// (R_MEMNO 1개 당)도서 대출가능여부(책 권수)
+	public int cntUserLo(int r_memno) {
+		SqlSession session = null;
+		int cnt=5;
+		try {
+			cnt = cnt - Integer.parseInt(session.selectOne("checkout.cntUserLo", r_memno));
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			if (session != null)
+				session.close();
+		}
+		System.out.println("[test]"+r_memno+"님의 대출가능 권수 = "+cnt);
+		return cnt;
+	}
+	
+	
+	// 도서 대출 신청(db insert)
+	public String checkout(int r_memno, admin.book.Lo_BookDTO dto) {
+		SqlSession session = null;
+		String result = "success";
+		try {
+			session = MybatisManager.getInstance().openSession();
+			session.insert("checkout.insertLo", dto); // 대출 Lo_book insert
+			session.update("checkout.updateAmount", dto.getL_bookid()); // 도서 소장권수 감소 Sl_Book update
+			session.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = "fail";
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return result;
+	}
+	
+}

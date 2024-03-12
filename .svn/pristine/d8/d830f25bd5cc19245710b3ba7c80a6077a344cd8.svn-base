@@ -1,0 +1,73 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<!DOCTYPE html>
+<html>
+<jsp:include page="../common/header.jsp"></jsp:include>
+<head>
+<meta charset="UTF-8">
+<script src="http://code.jquery.com/jquery-3.7.1.js"></script>
+<link type="text/css" rel="stylesheet"
+	href="/syLibrary/include/user.css">
+<link type="text/css" rel="stylesheet"
+	href="/syLibrary/include/template2.css">
+
+</head>
+<body>
+	<div class="container-fluid" id="menubar">
+		<ul class="nav nav-underline" id="title">
+			<li class="nav-item"><a class="nav-link" aria-current="page"
+				href="/syLibrary/user/search/search.jsp">&nbsp;&nbsp;&nbsp;자료찾기&nbsp;&nbsp;&nbsp;</a>
+			</li>
+			<li class="nav-item"><a class="nav-link active"
+				href="/syLibrary/user/book/myLibrary.jsp">&nbsp;&nbsp;&nbsp;나의서재&nbsp;&nbsp;&nbsp;</a>
+			</li>
+			<li class="nav-item"><a class="nav-link"
+				href="/syLibrary/user/info/guide.jsp">&nbsp;&nbsp;&nbsp;이용안내&nbsp;&nbsp;&nbsp;</a>
+			</li>
+		</ul>
+	</div>
+
+	<div class="container"	style="float: none; margin: 0 auto; margin-top: 3em">
+	<h5>
+			<b>예약 목록</b>
+		</h5>
+		<hr>
+		<ul>
+			<c:forEach var="myRList" items="${myReBook}">
+				<li style="list-style: none;">
+					<div class="row mb-4">
+						<!-- 이미지 -->
+						<div class="col col-md-auto">
+							<img src="${myRList.b_url}" style="width: 150px; height: 200px;">
+						</div>
+						<!-- 이미지 끝-->
+						<!-- 도서 설명 -->
+						<div class="col detail">
+						<p>								<a
+									href="/syLibrary/search_servlet/bookInfo.do?b_id=${myRList.r_bookid}">${myRList.b_name}</a>
+							</p>
+							<p>
+								<span>작가 : ${myRList.b_author} </span> <span>
+								출판사 : ${myRList.b_pub} </span> <span>발행연도 : ${myRList.b_year}</span>
+							</p>
+							<p>
+								<c:set var="now" value="<%=new java.util.Date()%>" />
+								<fmt:formatDate value="${now}" pattern="yyyy-MM-dd" var="today" />
+
+								<span>예약일 : ${myRList.r_regdate}</span><span>예약순번 : ${myRList.r_reservation} </span>
+								
+							</p>
+							<p>
+								<input type="button" value="예약취소" class="btn text-white pink"
+									onclick="reDelete(${myRList.r_memno}, ${myRList.r_bookid})">
+							</p> 
+						</div>
+						<!--도서설명 끝 -->
+					</div>
+				</li>
+			</c:forEach>
+		</ul>
+</body>
+</html>

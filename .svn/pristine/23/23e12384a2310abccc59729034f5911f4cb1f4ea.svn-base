@@ -1,0 +1,93 @@
+package review;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+
+import sqlmap.MybatisManager;
+
+public class ReviewDAO {
+	public List<Map<String, Object>> getReviews(int b_id) {
+		SqlSession session = null;
+		List<Map<String, Object>> reviews = null;
+		try {
+			session = MybatisManager.getInstance().openSession();
+			reviews = session.selectList("review.getReviews", b_id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return reviews;
+	}
+
+	public String insert(Map<String, Object> map) {
+		SqlSession session = null;
+		String result = "";
+		try {
+			session = MybatisManager.getInstance().openSession();
+			String contents = (String) map.get("contents");
+			contents = contents.replace("<", "&lt;");
+			contents = contents.replace(">", "&gt;");
+			contents = contents.replace("  ", "&nbsp;&nbsp;");
+			map.put("contents", contents);
+			session.insert("review.review_insert", map);
+			session.commit();
+			session.close();
+			result = "Complete";
+			System.out.println("리뷰insert :" + map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = "Not possible";
+			System.out.println("리뷰insert 에러");
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		System.out.println("DAO : " + result);
+		return result;
+	}
+
+	// 회원이 삭제할 경우
+	public String delete(String option, Map<String, Object> map) {
+		SqlSession session = null;
+		String result = "";
+		try {
+			session = MybatisManager.getInstance().openSession();
+			session.delete("review.delete", map);
+			session.commit();
+			session.close();
+			result = "Complete";
+			System.out.println("DAO delete: " + result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = "Error";
+			System.out.println("DAO del 에러: " + result);
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return result;
+	}
+
+	// 관리자가 삭제할경우
+	public void delete(int idx) {
+		SqlSession session = null;
+		try {
+			session = MybatisManager.getInstance().openSession();
+			session.delete("review.delete", idx);
+			session.commit();
+			session.close();
+			System.out.println("DAO delete: " + idx + " 삭제완료");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("DAO delete 에러: " + idx);
+		} finally {
+			if (session != null)
+				session.close();
+		}
+	}
+}

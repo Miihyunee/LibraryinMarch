@@ -1,0 +1,134 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Document</title>
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/emn178/chartjs-plugin-labels/src/chartjs-plugin-labels.js"></script>
+    <script>
+    $(function() { 
+    	ct_Chart();
+	});
+    
+    
+    //차트 색상 랜덤
+    	function randomColor(category) {
+    		var colors = [];
+    		for (let i=0; i<category.length; i++) {
+    			//colors.push("#"+Math.round(Math.random() * 0xffffff * 0.5).toString(16));
+    			var r = Math.round(Math.random() * 127 + 127);
+    	        var g = Math.round(Math.random() * 127 + 127);
+    	        var b = Math.round(Math.random() * 127 + 127);
+    	        colors.push("rgb(" + r + ", " + g + ", " + b + ")");
+    		}
+    		return colors;
+    	}
+ 
+        function ct_Chart() {
+        		
+       		let category=[];
+       		let cnt =[];
+        		
+        	$.ajax({
+				url:"/syLibrary/admin_servlet/ct_cht.do",
+				type: "get",
+        		dataType: "json",
+        		contentType: "text/html;charset=utf-8",
+        		success: function(data){
+        			for (let j = 0; j < data.length; j++){
+        				category.push(data[j].category);
+        				cnt.push(data[j].cnt);
+        			}
+        			const ctx = document.getElementById('myChart').getContext('2d');
+        		    const myChart = new Chart(ctx, {
+					                type: 'pie', // bar, pie, line, doughnut, polarArea 옵션들을 선택
+					                data: {
+						                    labels: category,
+						                    datasets: [{
+						                    	data: cnt, //데이터 수치를 넣으면 자동으로 조절(10% 이하는 텍스트 노출이 안됨.)
+						                        //backgroundColor: ['#FB3640', '#EFCA08', '#43AA8B', '#253D5B','#ffd950', '#02bc77', '#28c3d7', '#FF6384','#FFFFFF','#D0FC5C']
+						                        backgroundColor: randomColor(category)
+						                    }]
+					                },
+					                options: {
+					                    responsive: false,
+					                  
+					                    legend: {
+					                        position: 'bottom'
+					                    },
+					                    plugins: {
+					                        datalabels: {
+					                            color: ['#fff', '#fff', '#fff', '#fff'],
+					                            borderWidth: 2,
+					                            borderColor: ['#fff', '#fff', '#fff', '#fff'],
+					                            borderRadius : 25,
+					                            anchor: 'center',
+					                        },
+					                    }
+					                }
+					});
+        		}
+        	});
+      }
+
+    </script>
+
+<!-- <style type="text/css">/* Chart.js */
+@
+keyframes chartjs-render-animation {
+	from {opacity: .99
+}
+
+to {
+	opacity: 1
+}
+
+}
+.chartjs-render-monitor {
+	animation: chartjs-render-animation 1ms
+}
+
+.chartjs-size-monitor, .chartjs-size-monitor-expand,
+	.chartjs-size-monitor-shrink {
+	position: absolute;
+	direction: ltr;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	overflow: hidden;
+	pointer-events: none;
+	visibility: hidden;
+	z-index: -1
+}
+
+.chartjs-size-monitor-expand>div {
+	position: absolute;
+	width: 1000000px;
+	height: 1000000px;
+	left: 0;
+	top: 0
+}
+
+.chartjs-size-monitor-shrink>div {
+	position: absolute;
+	width: 200%;
+	height: 200%;
+	left: 0;
+	top: 0
+}
+</style>-->
+</head>
+<body>
+	<!-- <input type="button" value="카테고리별 차트" class="btn text-white"
+				onclick="ct_Chart()"> -->
+     <div class="chart-wrapper">
+      <!-- style="width:514; height:514;"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div> -->
+        <canvas id="myChart" class="chartjs-render-monitor" width="500px" height="400px" style="float: left"></canvas>
+    </div> 
+
+</body></html>

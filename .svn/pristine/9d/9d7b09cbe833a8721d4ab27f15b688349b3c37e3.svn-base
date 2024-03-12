@@ -1,0 +1,46 @@
+package myLibrary;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+
+import sqlmap.MybatisManager;
+
+public class MyLibraryDAO {
+
+	public MyLibraryDTO myLibrary_list(String mId) {
+		SqlSession session = MybatisManager.getInstance().openSession();
+		MyLibraryDTO myLibrary = session.selectOne("myLibrary.myLibrary_info", mId);
+		session.close();
+		return myLibrary;
+	}
+
+	public List<MyLibraryDTO> myLoanBook(int mNo) {
+		SqlSession session = MybatisManager.getInstance().openSession();
+		List<MyLibraryDTO> myLoanBook = session.selectList("myLibrary.myLoanBook", mNo);
+		session.close();
+		return myLoanBook;
+	}
+
+	public List<MyLibraryDTO> myHistory(int mNo) {
+		SqlSession session = MybatisManager.getInstance().openSession();
+		List<MyLibraryDTO> myHistory = session.selectList("myLibrary.myHistory", mNo);
+		session.close();
+		return myHistory;
+	}
+
+	public int checkReservation(int bId) {
+		SqlSession session = MybatisManager.getInstance().openSession();
+		int reCnt = session.selectOne("myLibrary.checkReservation", bId);
+		session.close();
+		return reCnt;
+	}
+
+	public void updateReturn(Map<String, Object> map) {
+		SqlSession session = MybatisManager.getInstance().openSession();
+		session.update("myLibrary.updateReturn", map);
+		session.commit();
+		session.close();
+	}
+}

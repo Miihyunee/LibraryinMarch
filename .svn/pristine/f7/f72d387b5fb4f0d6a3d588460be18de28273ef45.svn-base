@@ -1,0 +1,96 @@
+package book;
+
+import java.io.IOException;
+import java.util.List;
+
+import common.PageUtil;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+public class SearchController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		SearchDAO dao = new SearchDAO();
+		String url = request.getRequestURI();
+		String contextPath = request.getContextPath();
+
+		if (url.contains("search.do")) {
+			// 자료검색페이지 → 키워드로 통합검색(도서명, 작가, 출판사)
+			String keyword = request.getParameter("keyword");
+			String option = "all";
+
+			// 페이지 설정
+			int count = dao.resultCount(option, keyword);
+			int curPage = 1; // 페이지 초기화
+			if (request.getParameter("curPage") != null) {
+				curPage = Integer.parseInt(request.getParameter("curPage"));
+			}
+			common.PageUtil page = new PageUtil(count, curPage);
+			int start = page.getPageBegin();
+			int end = page.getPageEnd();
+
+			// 검색 결과 목록 가져오기
+			List<BookDTO> list = dao.totSearch(option, keyword, start, end);
+			request.setAttribute("list", list);
+			request.setAttribute("keyword", keyword);
+			request.setAttribute("option", option);
+			request.setAttribute("page", page);
+
+			RequestDispatcher rd = request.getRequestDispatcher("/main/list.jsp");
+			rd.forward(request, response);
+		} else if (url.contains("detailSearch.do")) {
+			String option = "detail";
+			String b_name = request.getParameter("b_name");
+			String b_author = request.getParameter("b_author");
+			String b_pub = request.getParameter("b_pub");
+
+			// 페이지 설정
+			int count = dao.resultCount(option, b_name, b_author, b_pub);
+			int curPage = 1; // 페이지 초기화
+			if (request.getParameter("curPage") != null) {
+				curPage = Integer.parseInt(request.getParameter("curPage"));
+			}
+			common.PageUtil page = new PageUtil(count, curPage);
+			int start = page.getPageBegin();
+			int end = page.getPageEnd();
+
+			List<BookDTO> list = dao.detailSearch(b_name, b_author, b_pub, start, end);
+			request.setAttribute("list", list);
+			request.setAttribute("b_name", b_name);
+			request.setAttribute("b_author", b_author);
+			request.setAttribute("b_pub", b_pub);
+			request.setAttribute("page", page);
+
+			RequestDispatcher rd = request.getRequestDispatcher("/main/list.jsp");
+			rd.forward(request, response);
+		} else if (url.contains("list.do")) {
+			// 페이지 나누기 설정
+			int count = dao.count();
+			int curPage = 1;
+			if (request.getParameter("curPage") != null) {
+				curPage = Integer.parseInt(request.getParameter("curPage"));
+			}
+			common.PageUtil page = new PageUtil(count, curPage);
+			int start = page.getPageBegin();
+			int end = page.getPageEnd();
+
+			List<BookDTO> list = dao.pageList(start, end);
+			request.setAttribute("list", list);
+			request.setAttribute("page", page);
+			RequestDispatcher rd = request.getRequestDispatcher("/main/list.jsp");
+			rd.forward(request, response);
+		}
+
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doGet(request, response);
+	}
+
+}

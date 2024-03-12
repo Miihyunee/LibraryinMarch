@@ -1,0 +1,66 @@
+package admin.login;
+
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
+import java.io.IOException;
+
+import admin.login.AdminDTO;
+import admin.memo.MemoDAO;
+import admin.memo.MemoDTO;
+
+public class AdminController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		String url = request.getRequestURI();
+		String path = request.getContextPath();
+		AdminDAO dao = new AdminDAO();
+		MemoDAO dao1 = new MemoDAO();
+		if (url.indexOf("adlogin.do") != -1) {
+			String a_id = request.getParameter("a_id");
+			String a_passwd = request.getParameter("a_passwd");
+			AdminDTO dto = new AdminDTO();
+			dto.setA_id(a_id);
+			dto.setA_passwd(a_passwd);
+			String a_name = dao.login(dto);
+			System.out.println(dao);
+			if(a_name==null) {
+				String page=path+"/admin/admin_login.jsp?message=error";
+				response.sendRedirect(page);
+			} else { //로그인 성공
+				HttpSession session = request.getSession();
+				session.setAttribute("a_id", a_id);
+				session.setAttribute("a_name", a_name);
+				session.setAttribute("result", a_name+"님 로그인중");
+				System.out.println("dto="+dto);
+				//메모화면
+				int me_idx=1;
+				MemoDTO memo = dao.list(me_idx);
+				session.setAttribute("memo",memo);
+				System.out.println("값===="+memo);
+				
+				String page = "/admin/admin_main.jsp";
+				RequestDispatcher rd = request.getRequestDispatcher(page);
+				rd.forward(request, response);
+			}
+		} else if(url.indexOf("adlogout.do") != -1) {
+			HttpSession session = request.getSession();
+			session.invalidate();
+			String page = path + "/admin/admin_login.jsp?massage=logout";
+			response.sendRedirect(page);
+		}
+	
+	
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
+	}
+}

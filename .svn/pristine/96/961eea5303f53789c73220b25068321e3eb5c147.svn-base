@@ -1,0 +1,59 @@
+package member;
+
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+public class AdmemberController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		AdmemberDAO dao = new AdmemberDAO();
+		String url = request.getRequestURL().toString();
+		/* String path = request.getContextPath(); */
+		if(url.indexOf("ad_list.do") != -1) {
+			
+			String search_option = request.getParameter("search_option");
+			if (search_option==null||search_option.equals(""))
+				search_option = "a_name";
+			String search = request.getParameter("search");
+			if(search==null)
+				search = "";
+			
+			List<MemberDTO> dto = dao.ad_list(search_option,search);
+//			int m_no = Integer.parseInt(request.getParameter("m_no"));
+			System.out.println("dto=" + dto);
+//			request.setAttribute("items",items);
+			request.setAttribute("dto",dto);
+			request.setAttribute("search_option", search_option);
+			request.setAttribute("search",search);
+			String page = "/admin/member/admin_m_list.jsp";
+			RequestDispatcher rd = request.getRequestDispatcher(page);
+			rd.forward(request,response);
+		} else if (url.indexOf("ad_list_detail.do") != -1) {
+			String m_no = request.getParameter("m_no");
+//			Map<String,Object> de_list = dao.ad_list(m_no);
+//			List<MemberDTO> de_list = dao.ad_list(m_no);
+			MemberDTO de_list = dao.ad_list(m_no);
+			request.setAttribute("de_list=",de_list);
+			System.out.println("de_list=" + de_list);
+			String page ="/admin/member/mem_detail.jsp";
+			RequestDispatcher rd = request.getRequestDispatcher(page);
+			rd.forward(request,response);
+		}
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
+	}
+
+}

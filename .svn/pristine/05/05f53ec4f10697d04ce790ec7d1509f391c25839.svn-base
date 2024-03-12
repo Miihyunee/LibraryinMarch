@@ -1,0 +1,98 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+
+<style>
+td > a{
+color: black;
+font-seight:bold;
+}
+</style>
+
+
+<!-- 요약 -->
+<div class="d-flex" id="brief" name="brief"  style="width:100%">
+	<div class="col-10">
+		<c:if test='${requestScope.option=="all"}'>
+			<input type="hidden" id="option" value="all">
+			<script>console.log(${option}.val() + "+" + "${option}")</script>
+			<h5> <span>'검색어:${keyword}'</span>에 대한 검색결과, 총 <span>${count}</span> 건 </h5>
+		</c:if>
+		<c:if  test='${requestScope.option=="detail"}'>
+		<input type="hidden" id="option" value="detail">
+			<script>console.log(${option}.val()+"+"+"${option}")</script>
+			<h5> <span>'[제목]:${b_name} [저자]:${b_author} [발행처]:${b_pub}'</span>에 대한 검색결과, 총 <span>${count}</span> 건 </h5>
+		</c:if>
+	</div>
+	<div class="d-inline-flex col-2 justify-content-end">
+	<!-- prop("checked", true/false)를 사용 -->
+		<input type="radio" class="btn-check" name="viewOpt" id="view1" value="view1" onclick="changeView()" autocomplete="on" checked>
+		<label class="btn btn-light" for="view1"><i class="bi bi-distribute-vertical"></i></label>
+		
+		<input type="radio" class="btn-check" name="viewOpt" id="view2" value="view2" onclick="changeView()" autocomplete="on">
+		<label class="btn btn-light" for="view2"><i class="bi bi-grid-fill"></i></label>
+	</div>
+</div>
+
+<!-- 테이블뷰 -->
+<table class="table table-sm table-striped table-hover align-middle caption-top">
+<c:forEach var="dto" items="${list }" varStatus="vst">
+
+	<input type="hidden" name="b_id" value="${dto.b_id }">
+	<tr style="max-height:100px;" align="center">
+		<td>
+			<img src="${dto.b_url}" alt="준비중" style="width: 100px; max-height: 150px">
+		</td>
+		<td align="left">
+			<a href="/syLibrary/search_servlet/bookInfo.do?b_id=${dto.b_id}">
+			<h4>${dto.b_name }</h4></a>
+			<br>${dto.b_author }
+			<br>${dto.b_pub}&nbsp;&nbsp;|&nbsp;&nbsp;${dto.b_year}
+		</td>
+		<td>
+			<div class="btn-group-vertical" style="padding:0.5rem" role="group" aria-label="Vertical button group">
+			<c:choose>
+				<c:when test="${stateinfo[vst.index].state == 'y' }">
+					<button type="button" class="btn btn-light" disabled>대출가능<br>(비치중)</button>
+					<button type="button" class="btn btn-light" id="btnChkout" name="btnChkout">대출신청</button>
+				</c:when>
+				<c:otherwise>
+					<button type="button" class="btn btn-outline-warning" disabled>대출불가</button>
+					<button type="button" class="btn btn-outline-warning" id="btnReserv" name="btnReserv">예약신청</button>
+				</c:otherwise>
+			</c:choose>	
+			</div>
+		</td>
+	</tr>
+</c:forEach>
+</table> 
+
+<!-- 페이지 이동 -->
+<div class="container" align="center">
+페이지이동 툴바 테스트
+	<c:if test="${page.curPage > 1 }">
+		<a href="#" onclick="moveTo('1')"><i class="bi bi-chevron-double-left"></i></a>
+	</c:if>
+	<c:if test="${page.curBlock > 1 }">
+		<a href="#" onclick="moveTo('${page.prevPage}')"><i class="bi bi-chevron-left"></i></a>
+	</c:if>
+	
+	<c:forEach var="num" begin="${page.blockStart }" end="${page.blockEnd }">
+		<c:choose>
+			<c:when test="${num==page.curPage} ">
+				<span style="font-weight:bold">${num }</span>
+			</c:when>
+			<c:otherwise>
+				<a href="#" onclick="moveTo('${num}')">${num }</a>
+			</c:otherwise>
+		</c:choose>
+	</c:forEach>
+	
+	<c:if test="${page.curBlock < page.totBlock}">
+		<a href="#" onclick="moveTo('${page.nextPage}')"><i class="bi bi-chevron-right"></i></a>
+	</c:if>
+	<c:if test="${page.curPage < page.totPage }">
+		<a href="#" onclick="moveTo('${page.totPage}')"><i class="bi bi-chevron-double-right"></i></a>
+	</c:if>
+		
+</div>

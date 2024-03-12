@@ -1,0 +1,17 @@
+package admin.book;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
+public class Re_BookDTO {
+	private int r_num;
+	private int r_memno;
+	private int r_bookid;
+	private String r_regdate;
+	private int r_reservation;
+	private String r_loan_yn;
+}

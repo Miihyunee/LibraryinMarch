@@ -1,0 +1,122 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="http://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<script>
+
+$(document).ready(function(){
+	getGraph();
+});
+
+
+function getGraph() {
+	let dateList = [];
+	let bookList=[];
+	$.ajax({
+		url: "/syLibrary/admin_servlet/chart.do",
+		type: "get",
+		dataType:"json",
+		ContentType: "text/html;charset=utf-8",
+		success: function(data){
+			console.log(data);
+			for (let i=0; i<7; i++) {
+				dateList.push(data[i].L_LODATE);
+				bookList.push(data[i].LOAN_BOOK);	
+			}	
+			document.getElementById("date0").innerHTML = data[0].L_LODATE;
+			document.getElementById("date1").innerHTML = data[1].L_LODATE;
+			document.getElementById("date2").innerHTML = data[2].L_LODATE;
+			document.getElementById("date3").innerHTML = data[3].L_LODATE;
+			document.getElementById("date4").innerHTML = data[4].L_LODATE;
+			document.getElementById("date5").innerHTML = data[5].L_LODATE;
+			document.getElementById("date6").innerHTML = data[6].L_LODATE;
+			document.getElementById("book0").innerHTML = data[0].LOAN_BOOK;
+			document.getElementById("book1").innerHTML = data[1].LOAN_BOOK;
+			document.getElementById("book2").innerHTML = data[2].LOAN_BOOK;
+			document.getElementById("book3").innerHTML = data[3].LOAN_BOOK;
+			document.getElementById("book4").innerHTML = data[4].LOAN_BOOK;
+			document.getElementById("book5").innerHTML = data[5].LOAN_BOOK;
+			document.getElementById("book6").innerHTML = data[6].LOAN_BOOK;
+			const chartEl = document.getElementById('chart-container').getContext('2d');
+		    const barChart = new Chart(chartEl, {
+		        type: 'bar',
+		        data: {
+		            labels: dateList,
+		            datasets: [{
+		                label: '주간 도서 대출량',
+		                borderWidth: 3,
+		                backgroundColor: ['#FB3640', '#EFCA08', '#43AA8B', '#253D5B','#ffd950', '#02bc77', '#28c3d7'],
+		                data: bookList
+		            }]
+		        },
+		        options: {
+		        	responsive: false,
+		        	maintainAspectRatio: true,
+		        	datalabels: false		        
+		        }
+		    });
+		}
+	});
+}
+</script>
+<style>
+div {
+float: left;
+}
+</style>
+<body>
+<jsp:include page="admin_header.jsp" />
+<jsp:include page="menu.jsp" />
+<h3 style="padding-left: 10px; padding-top: 10px;">&nbsp;주간 도서 대출량</h3>
+ <div>
+	<table width="300px">
+		<tr align="center">
+			<th>대출일</th>
+			<th>도서량</th>
+		</tr>
+		<tr align="center">
+			<td><span id="date0"></span></td>
+			<td><span id="book0"></span></td>
+		</tr>
+		<tr align="center">
+			<td><span id="date1"></span></td>
+			<td><span id="book1"></span></td>
+		</tr>
+		<tr align="center">
+			<td><span id="date2"></span></td>
+			<td><span id="book2"></span></td>
+		</tr>
+		<tr align="center">
+			<td><span id="date3"></span></td>
+			<td><span id="book3"></span></td>
+		</tr>
+		<tr align="center">
+			<td><span id="date4"></span></td>
+			<td><span id="book4"></span></td>
+		</tr>
+		<tr align="center">
+			<td><span id="date5"></span></td>
+			<td><span id="book5"></span></td>
+		</tr>
+		<tr align="center">
+			<td><span id="date6"></span></td>
+			<td><span id="book6"></span></td>
+		</tr>
+	</table>
+	</div>
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-md-12">
+                <canvas id="chart-container" width="500px" height="400px" style="float: left"></canvas>   
+            </div>
+        </div>
+    </div>
+</body>
+</html>

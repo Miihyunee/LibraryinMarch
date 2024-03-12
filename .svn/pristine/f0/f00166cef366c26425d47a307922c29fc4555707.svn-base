@@ -1,0 +1,124 @@
+package member;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
+
+@MultipartConfig(maxFileSize = 1024 * 1024 * 10)
+public class MemberController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		String url = request.getRequestURI();
+		String path = request.getContextPath();
+		MemberDAO dao = new MemberDAO();
+
+		if (url.contains("list_memberInfo.do")) {
+
+		} else if (url.contains("join.do")) {
+			String mId = request.getParameter("mId");
+			String mPasswd = request.getParameter("mPasswd");
+			String mName = request.getParameter("mName");
+			String mTel = request.getParameter("mTel");
+			String mAddress = request.getParameter("mAddress");
+			String mEmail = request.getParameter("mEmail");
+			String birthdate = request.getParameter("mBirthDate");
+
+			MemberDTO dto = new MemberDTO();
+			dto.setM_id(mId);
+			dto.setM_passwd(mPasswd);
+			dto.setM_name(mName);
+			dto.setM_tel(mTel);
+			dto.setM_address(mAddress);
+			dto.setM_email(mEmail);
+			System.out.println("아이디 : " + mId);
+			System.out.println("비밀번호 : " + mPasswd);
+			System.out.println("이름 : " + mName);
+			System.out.println("전화번호 : " + mTel);
+			System.out.println("주소: " + mAddress);
+			System.out.println("이메일 : " + mEmail);
+			System.out.println("생년월일 : " + birthdate);
+
+			/*
+			 * try { // 형변환 (date) SimpleDateFormat format = new
+			 * SimpleDateFormat("yyyy-MM-dd"); Date mBirthDate = format.parse(birthdate);
+			 * System.out.println("생년월일 : " + mBirthDate); dto.setM_birth_date(mBirthDate);
+			 * } catch (Exception e) { e.printStackTrace(); }
+			 */
+
+			dao.insert_join(dto);
+			response.sendRedirect("../main/index.jsp");
+			/* login.jsp --회원가입하면 로그인 화면으로 이동 */
+		} else if (url.contains("edit_memberInfo.do")) {
+			MemberDTO dto = new MemberDTO();
+			ServletContext application = request.getSession().getServletContext();
+			String mImg_path = application.getRealPath("/images/");
+			
+			String mImg = "";
+			int mNo = Integer.parseInt(request.getParameter("m_no"));
+			String mPasswd = request.getParameter("mPasswd");
+			String mName = request.getParameter("mName");
+			/*
+			 * SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); String
+			 * birthdate = request.getParameter("mBirthDate");
+			 */
+			String mBirthDate = request.getParameter("mBirthDate");
+			String mTel = request.getParameter("mTel");
+			String mEmail = request.getParameter("mEmail");
+			String mAddress = request.getParameter("mAddress");
+
+			// 회원 이미지
+			try {
+				for (Part part : request.getParts()) {
+					mImg = part.getSubmittedFileName();
+					if (mImg != null && !mImg.trim().equals("")) {
+						part.write(mImg_path + mImg);
+						break;
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			/*
+			 * try { Date mBirthDate = format.parse(birthdate);
+			 * dto.setM_birth_date(mBirthDate); } catch (ParseException e) {
+			 * e.printStackTrace(); }
+			 */
+			dto.setM_passwd(mPasswd);
+			dto.setM_name(mName);
+			dto.setM_tel(mTel);
+			dto.setM_email(mEmail);
+			dto.setM_birth_date(mBirthDate);
+			dto.setM_address(mAddress);
+			
+			if (mImg == null || mImg.trim().equals("")) {
+				MemberDTO dto2 = dao.detailMember(mNo);
+				mImg = dto2.getM_img();
+				dto.setM_img(mImg);
+			} else {
+				dto.setM_img(mImg);
+			}
+
+			dao.edit_memberInfo(dto);
+			String page = "../member/member_eidt.jsp";
+			response.sendRedirect(path + page);
+		}
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doGet(request, response);
+	}
+}

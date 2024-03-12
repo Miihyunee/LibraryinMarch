@@ -1,0 +1,33 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<jsp:include page="../common/header.jsp"></jsp:include>
+<head>
+<meta charset="UTF-8">
+<script src="http://code.jquery.com/jquery-3.7.1.js"></script>
+</head>
+<body>
+	<div class="container-fluid" id="menubar">
+		<ul class="nav nav-underline" id="title">
+			<li class="nav-item"><a class="nav-link" aria-current="page"
+				href="/syLibrary/user/book/search.jsp">&nbsp;&nbsp;&nbsp;자료찾기&nbsp;&nbsp;&nbsp;</a>
+			</li>
+			<li class="nav-item"><a class="nav-link active"
+				href="/syLibrary/user/book/myLibrary.jsp">&nbsp;&nbsp;&nbsp;나의서재&nbsp;&nbsp;&nbsp;</a>
+			</li>
+			<li class="nav-item"><a class="nav-link" href="#">&nbsp;&nbsp;&nbsp;이용안내&nbsp;&nbsp;&nbsp;</a>
+			</li>
+		</ul>
+	</div>
+	<div class="container"
+		style="float: none; margin: 0 auto; margin-top: 3em">
+		<p>대출현황건수 : ${l_book_cnt} 건</p>
+		<table border="1">
+			<tr>
+			<th></th>
+			</tr>
+		</table>
+		</div>
+</body>
+</html>

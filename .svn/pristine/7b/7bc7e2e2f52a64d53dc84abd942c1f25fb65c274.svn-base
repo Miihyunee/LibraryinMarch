@@ -1,0 +1,88 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="icon" href="../resources/images/sist.png" type="image/x-icon">
+<link rel="stylesheet" href="../include/css/bootstrap.css">
+<script src="../include/js/bootstrap.js"></script>
+<!-- IONICONS -->
+<script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+<script>
+/* function del() {
+	if(confirm("로그아웃 하시겠습니까?")==true){
+		location.href="/syLibrary/admin_servlet/adlogout.do";
+	} else {
+		out.close();
+	}
+} */
+/* $(function() {
+	$("#btnLogout").click(function() {
+		if(confirm("로그아웃 하시겠습니까?")==true) {
+			document.form2.action="/syLibrary/admin_servlet/adlogout.do";
+			location.href="/syLibrary/admin_servlet/adlogout.do"
+		} else {
+			
+		}
+	});
+}); */
+</script>
+<style>
+Header {  
+  height: 75px;
+  padding: 1rem;
+  color: white;
+  background: cadetblue;
+  font-weight: bold;
+  font-size: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+ion-icon {
+  font-size: 40px;
+  align-items: center;
+  justify-content: space-between;
+}
+.right-box {
+  background: cadetblue;
+  float: right;
+  color: white;
+  font-size: 15px;
+}
+ab {
+ font-size: 10px;
+}
+</style>
+</head>
+<body>
+<header>
+	<nav>
+		<div class="container-fluid">
+			<a class="navbar-brand" href="../admin/admin_main.jsp">
+				<ion-icon name="book-outline"></ion-icon>
+				<a>Manager</a>
+			</a>
+		</div>
+	</nav>
+	<%=session.getAttribute("result") %>
+
+	<form method="post" name="form2" action="/syLibrary/admin_servlet/adlogout.do">
+		<!-- <input type="submit" value="로그아웃" class="right"> -->
+		<!-- <a href="#" class="ui-btn-right">로그아웃</a> -->
+		<!-- <a href="#" data-icon="gear" class="ui-btn-right">로그아웃</a> -->
+		<nav>
+		<div class="container-fluid">
+			<a class="navbar-brand" href="#">
+				<!-- <ion-icon name="log-out-outline" size="small"></ion-icon> -->
+				<input type="submit" value="logout" class="right-box" onclick="return confirm('로그아웃 하시겠습니까?')" >
+				<!-- <a href="#" type="submit" class="right-box">logout</a> -->
+			</a>
+		</div>
+	</nav>
+	</form>
+</header>
+</body>
+</html>

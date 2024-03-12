@@ -1,0 +1,104 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <title></title>
+<style>
+
+
+</style>
+<script>
+// Date 객체 생성
+<%let date = new Date();
+
+function renderCalendar() {
+	const viewYear = date.getFullYear(); //년도
+	const viewMonth = date.getMonth(); //월
+	
+	document.querySelector('.year-month').textContent = `${viewYear}년 ${viewMonth + 1}월`;
+	
+	const prevLast = new Date(viewYear, viewMonth, 0); //이전
+	const thisLast = new Date(viewYear, viewMonth + 1, 0); //현재
+	
+	const PLDate = prevLast.getDate(); //지난달 마지막날짜
+	const PLDay = prevLast.getDay(); //지난달 마지막요일
+	
+	const TLDate = thisLast.getDate(); //이번달 마지막날짜
+	const TLDay = thisLast.getDay(); //이번달 마지막요일
+	
+	//담아둘 배열
+	const prevDates = [];
+	const thisDates = [...Array(TLDate + 1).keys()].slice(1);
+	const nextDates = [];
+	
+	//이전달 표현 날짜생성
+	if (PLDay !== 6) {
+	  for (let i = 0; i < PLDay + 1; i++) {
+	    prevDates.unshift(PLDate - i);
+	  }
+	}
+	
+	//다음달 표현 날짜생성
+	for (let i = 1; i < 7 - TLDay; i++) {
+	  nextDates.push(i);
+	}
+	
+	const dates = prevDates.concat(thisDates, nextDates); //3개 배열 합침
+	
+	dates.forEach((date, i) => {
+	  dates[i] = <%=<div class="date">%>${date}<%=</div>%>;
+	})
+	
+	document.querySelector('.dates').innerHTML = dates.join('');
+}
+renderCalendar();
+	
+	
+	//이전달
+	function prevMonth() {
+	  date.setMonth(date.getMonth() - 1);
+	  renderCalendar();
+	}
+	//다음달
+	function nextMonth() {
+	  date.setMonth(date.getMonth() + 1);
+	  renderCalendar();
+	}
+	//오늘날짜
+	function goToday() {
+	  date = new Date();
+	  renderCalendar();
+	}
+</script>   
+    
+</head>
+<body>
+	
+    <div class="calendar">
+        <div class="header">
+            <div class="year-month"></div>
+            <div class="nav">
+                <button class="nav-btn go-prev" onclick="prevMonth()">&lt;</button>
+                <button class="nav-btn go-today" onclick="goToday()">Today</button>
+                <button class="nav-btn go-next" onclick="nextMonth()">&gt;</button>
+            </div>
+        </div>
+        <div class="main">
+            <div class="days">
+                <div class="day">일</div>
+                <div class="day">월</div>
+                <div class="day">화</div>
+                <div class="day">수</div>
+                <div class="day">목</div>
+                <div class="day">금</div>
+                <div class="day">토</div>
+            </div>
+            <div class="dates"></div>
+        </div>
+    </div>
+</body>
+</html>

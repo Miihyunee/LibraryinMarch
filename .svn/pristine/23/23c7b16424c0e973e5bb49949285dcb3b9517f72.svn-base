@@ -1,0 +1,153 @@
+package book;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+
+import sqlmap.MybatisManager;
+
+public class SearchDAO {
+	
+	// 키워드 검색
+	public List<BookDTO> totSearch(String keyword, String option, int start, int end) {
+		SqlSession session = null;
+		List<BookDTO> list = null;
+
+		try {
+			session = MybatisManager.getInstance().openSession();
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("keyword", keyword);
+			map.put("option", option);
+			list = session.selectList("search.totSearch", map);
+			
+			for(BookDTO dto:list) {
+				int b_id=dto.getB_id();
+				String b_name=dto.getB_name();
+				String b_author=dto.getB_author();
+				String b_pub=dto.getB_pub();
+				int b_year=dto.getB_year();
+				String b_url=dto.getB_url();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return list;
+	}
+
+	public List<BookDTO> detailSearch(String b_name, String b_author, String b_pub, int start, int end) {
+		SqlSession session = null;
+		List<BookDTO> list = null;
+
+		try {
+			session = MybatisManager.getInstance().openSession();
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("b_name", b_name);
+			map.put("b_author", b_author);
+			map.put("b_pub", b_pub);
+			map.put("start", start);
+			map.put("end", end);
+			list = session.selectList("search.detailSearch", map);
+			
+			for(BookDTO dto:list) {
+				int b_id=dto.getB_id();
+				String b_name=dto.getB_name();
+				String b_author=dto.getB_author();
+				String b_pub=dto.getB_pub();
+				int b_year=dto.getB_year();
+				String b_url=dto.getB_url();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return list;
+	}
+
+	// 레코드 개수 계산(페이지 나누기)
+	public int count() {
+		int result = 0;
+		SqlSession session = null;
+
+		try {
+			session = MybatisManager.getInstance().openSession();
+			result = session.selectOne("search.recCount");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return result;
+	}
+	
+	//resultCount함수 오버로딩 : 검색 결과 레코드 수 계산
+	public int resultCount(String option, String keyword) {
+		int result = 0;
+		SqlSession session = null;
+		
+		try {
+			session = MybatisManager.getInstance().openSession();
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("option", option);
+			map.put("keyword", keyword);
+			result = session.selectOne("search.resultCount", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return result;
+	}
+	
+	public int resultCount(String option, String b_name, String b_author,String b_pub) {
+		int result = 0;
+		SqlSession session = null;
+
+		try {
+			session = MybatisManager.getInstance().openSession();
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("option", option);
+			map.put("b_name", b_name);
+			map.put("b_author", b_author);
+			map.put("b_pub", b_pub);
+			result = session.selectOne("search.resultCount", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return result;
+	}
+	
+	
+	// 페이지 별 도서목록(페이지나누기)
+	public List<BookDTO> pageList(int pageStart, int pageEnd) {
+		List<BookDTO> list = null;
+		SqlSession session = null;
+
+		try {
+			session = MybatisManager.getInstance().openSession();
+			Map<String, Object> map = new HashMap<>();
+			map.put("start", pageStart);
+			map.put("end", pageEnd);
+			list = session.selectList("search.pageList", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return list;
+	}
+	
+}

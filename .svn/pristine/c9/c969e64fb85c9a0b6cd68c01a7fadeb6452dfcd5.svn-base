@@ -1,0 +1,46 @@
+package admin.memo;
+
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+
+import member.MemberDTO;
+import sqlmap.MybatisManager;
+
+public class MemoDAO {
+
+	public MemoDTO list(int me_idx) {
+		SqlSession session = MybatisManager.getInstance().openSession();
+		MemoDTO dto1 = session.selectOne("memo.memo",me_idx);
+		session.close();
+		return dto1;
+	}
+
+	public void insert(Map<String, Object> map) {
+		SqlSession session = MybatisManager.getInstance().openSession();
+		String memo = (String)map.get("memo");
+		memo = memo.replace("<", "&lt;");
+		memo = memo.replace(">", "&gt;");
+		memo = memo.replace("  ","&nbsp;&nbsp;");
+		map.put("memo", memo);
+		session.insert("memo.insert", map);
+		session.commit();
+		session.close();		
+	}
+
+	public void delete(int me_idx) {
+		SqlSession session = MybatisManager.getInstance().openSession();
+		session.delete("memo.delete", me_idx);
+		session.commit();
+		session.close();		
+	}
+
+	public void update(MemoDTO dto1) {
+		SqlSession session = MybatisManager.getInstance().openSession();
+		session.update("memo.update", dto1);
+		session.commit();
+		session.close();
+		
+	}
+
+}

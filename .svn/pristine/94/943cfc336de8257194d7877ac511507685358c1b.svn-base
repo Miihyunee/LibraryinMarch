@@ -1,0 +1,18 @@
+package admin.book;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
+public class Lo_BookDTO {
+	private int l_num;
+	private int l_memno;
+	private int l_bookid;
+	private String l_lodate;
+	private String l_retdate;
+	private String l_retturn_yn;
+	private String l_renew_yn;
+}

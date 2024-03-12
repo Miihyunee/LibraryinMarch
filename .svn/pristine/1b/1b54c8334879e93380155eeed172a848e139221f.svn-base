@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="suggest">
+<!-- 대출/예약 상위 5위 -->
+<select id="type1" resultType="admin.book.BookDTO">
+select A.* 
+from 
+    (select L_BOOKID, count(*) from bk_status group by L_BOOKID order by count(*) desc, L_BOOKID) A
+where<![CDATA[ rownum <=5 ]]>
+</select>
+</mapper>

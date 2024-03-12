@@ -1,0 +1,60 @@
+package member;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+
+import sqlmap.MybatisManager;
+
+public class AdmemberDAO {
+	public List<MemberDTO> ad_list(String search_option, String search) {
+		SqlSession session = MybatisManager.getInstance().openSession();
+		List<MemberDTO> ad_items = null;
+		try {	
+			if(search_option.equals("m_all")){ 
+				ad_items = session.selectList("member.ad_list_all",search);
+			} else {
+				Map<String,Object> map = new HashMap<>();
+				map.put("search_option",search_option);
+				map.put("search",search);
+				ad_items = session.selectList("member.ad_list",map);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return ad_items;
+	}
+	
+	public MemberDTO ad_list(String m_no) {
+//		SqlSession session = null;
+//		List<MemberDTO> de_items = null;
+//		try {
+//			session = MybatisManager.getInstance().openSession();
+//			de_items = session.selectOne("member.ad_detail", m_no);
+//			System.out.println("de_items="+de_items);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		} finally {
+//			if (session != null)
+//				session.close();
+//		}
+//		return de_items;
+		
+		SqlSession session = MybatisManager.getInstance().openSession();
+		MemberDTO de_list = session.selectOne("member.ad_detail", m_no);
+		session.close();
+		return de_list;
+	}
+	
+//	public Map<String, Object> ad_list_detail(int m_no) {
+//		SqlSession session = MybatisManager.getInstance().openSession();
+//		Map<String, Object> map = session.selectOne("member.member_detail", m_no);
+//		session.close();
+//		return map;
+//	}
+}

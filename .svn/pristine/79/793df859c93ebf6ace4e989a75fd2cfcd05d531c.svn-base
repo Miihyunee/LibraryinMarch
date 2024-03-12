@@ -1,0 +1,145 @@
+package checkout;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+
+import admin.book.BookDTO;
+import sqlmap.MybatisManager;
+
+public class CheckoutDAO {
+	// (b_id 1개 당)도서 대출가능여부(소장상태): 대여가능(Y) or 대여불가 (N)
+	public String isAvailable(int b_id) {
+		SqlSession session = null;
+		String state = "";
+		int loCount = 0;
+		//System.out.println("isAvailable = " + b_id);
+		try {
+			session = MybatisManager.getInstance().openSession();
+			int b_amount = 3;
+			loCount = session.selectOne("checkout.loCount", b_id);
+			if (b_amount > loCount) {
+				state = "y";
+			} else {
+				state = "n";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		//System.out.println("[isAvailable]" + b_id + " & " + loCount + " & " + state);
+		return state;
+	}
+
+	// 회원의 대출가능여부: 1(대출가능) or 0(대출불가, 5권 모두 대출중)
+	public int checkMloan(String m_id) {
+		SqlSession session = null;
+		int m_loan = 1;
+		try {
+			session = MybatisManager.getInstance().openSession();
+			m_loan = session.selectOne("checkout.check_mLoan", m_id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return m_loan;
+	}
+
+	// 검색도서목록, 대여가능여부 리스트
+	public List<Map<String, Object>> listState(List<BookDTO> list) {
+		SqlSession session = null;
+		List<Map<String, Object>> states = new ArrayList<>();
+		try {
+			session = MybatisManager.getInstance().openSession();
+			CheckoutDAO dao = new CheckoutDAO();
+			// System.out.println("DAO tot try문" + list+"&"+list.size());
+			for (BookDTO dto : list) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				// System.out.println("DAO tot for문" + list+"&"+list.size());
+				String state = dao.isAvailable(dto.getB_id());
+				map.put("b_id", dto.getB_id());
+				map.put("state", state);
+				//System.out.println("listState 반복" + dto.getB_id() + " & " + state);
+				states.add(map);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		//System.out.println("DAO listState 리스트" + states + "&" + states.size());
+		return states;
+	}
+
+	// (m_id 1개 당) 현재 대출가능한 도서 개수
+	public int cntUserLo(String m_id) {
+		SqlSession session = null;
+		int cnt = 5;
+		try {
+			cnt = cnt - Integer.parseInt(session.selectOne("checkout.cntUserLo", m_id));
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		System.out.println("[cntUserLo]" + m_id + "대출가능 권수 = " + cnt);
+		return cnt;
+	}
+
+	// 도서 대출 신청(db insert)
+	public String checkout(String m_id, int b_id) {
+		SqlSession session = null;
+		String result = "";
+		try {
+			session = MybatisManager.getInstance().openSession();
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("m_id", m_id);
+			map.put("b_id", b_id);
+			session.insert("checkout.insert_Lobook", map); // 대출 Lo_book insert
+			session.update("checkout.call_CheckLoan", m_id);
+			session.commit();
+			result = "success";
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = "fail";
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		System.out.println("[DAO checkout 결과]" + result);
+		return result;
+	}
+
+	// 가장 빠른 반납예정일
+	public String fastRetdate(int b_id) {
+		SqlSession session = null;
+		String state = "";
+		String result = "";
+
+		try {
+			session = MybatisManager.getInstance().openSession();
+			CheckoutDAO dao = new CheckoutDAO();
+			state = dao.isAvailable(b_id);
+			if (state.equals("n")) {
+				result = session.selectOne("checkout.retDate", b_id);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = "";
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return result;
+	}
+
+}

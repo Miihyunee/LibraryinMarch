@@ -1,0 +1,49 @@
+package review;
+
+import java.io.IOException;
+import java.util.List;
+
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+public class ReviewController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		ReviewDAO dao = new ReviewDAO();
+		String url = request.getRequestURI();
+		String contextPath = request.getContextPath();
+		if (url.contains("reviewList.do")) {
+			int b_id = Integer.parseInt(request.getParameter("b_id"));
+			List<ReviewDTO> reviews = dao.list(b_id);
+			request.setAttribute("reviews", reviews);
+			String result = "/user/search/reviews.jsp";
+			RequestDispatcher rd = request.getRequestDispatcher(result);
+			rd.forward(request, response);
+
+		} else if (url.contains("insert.do")) {
+			String m_id = request.getParameter("mId");
+			int b_id = Integer.parseInt(request.getParameter("b_id"));
+			String contents = request.getParameter("contents");
+			ReviewDTO dto = new ReviewDTO(m_id, b_id, contents);
+			dto.setM_id(m_id);
+			dto.setB_id(b_id);
+			dto.setContents(contents);
+			dao.insert(dto);
+
+		} else if (url.contains("delete.do")) {
+			int idx = Integer.parseInt(request.getParameter("idx"));
+			dao.delete(idx);
+		}
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doGet(request, response);
+	}
+
+}

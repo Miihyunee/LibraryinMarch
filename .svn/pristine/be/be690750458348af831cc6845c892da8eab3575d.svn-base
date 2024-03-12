@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="loanBook">
+<select id="list" resultType="admin.l_book.LoanDTO">
+select *
+	from (
+		select rownum as rn, A.*
+		from (
+			select l_num, l_bookid,
+			(select b_name from sl_book where sl_book.b_id = lo_book.l_bookid) b_name,
+			(select b_author from sl_book where sl_book.b_id = lo_book.l_bookid) b_author,
+			(select  m_id from sl_member where sl_member.m_no=lo_book.l_memno) m_id,
+			(select  m_name from sl_member where sl_member.m_no=lo_book.l_memno) m_name,
+			to_char(l_lodate, 'yy/mm/dd') l_lodate, to_char(l_retdate, 'yy/mm/dd') l_retdate, 
+			l_renew_yn, l_return_yn
+			from lo_book
+			where lo_book.l_return_yn = 'N'
+			order by l_retdate desc
+		) A
+	) where rn between #{start} and #{end}
+</select>
+
+<select id="list_search" resultType="admin.l_book.LoanDTO">
+	select *
+	from (
+		select rownum as rn, A.*
+		from (
+			select l_num, l_bookid,
+			(select b_name from sl_book where sl_book.b_id = lo_book.l_bookid) b_name,
+			(select b_author from sl_book where sl_book.b_id = lo_book.l_bookid) b_author,
+			(select  m_id from sl_member where sl_member.m_no=lo_book.l_memno) m_id,
+			(select  m_name from sl_member where sl_member.m_no=lo_book.l_memno) m_name,
+			to_char(l_lodate, 'yy/mm/dd') l_lodate, to_char(l_retdate, 'yy/mm/dd') l_retdate, 
+			l_renew_yn, l_return_yn
+			from lo_book
+			where lo_book.l_return_yn = 'N' and (select ${search_option} from sl_book where sl_book.b_id = lo_book.l_bookid) like '%' || #{keyword} || '%' 
+			order by l_retdate desc
+		) A
+	) where rn between #{start} and #{end}
+</select>
+
+<select id="count" resultType="int">
+	select count(*) from lo_book where lo_book.l_return_yn = 'N'
+</select>
+
+<select id="search_count" resultType="int">
+	select count(*) from lo_book
+	where (select ${search_option} from sl_book where sl_book.b_id = lo_book.l_bookid) like '%' || #{keyword} || '%'  
+</select>
+<select id="re_book">
+	update lo_book set l_return_yn = 'Y' where l_num = #{l_num}
+</select>
+</mapper>

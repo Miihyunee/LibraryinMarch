@@ -1,0 +1,101 @@
+package recommend;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+
+import admin.book.BookDTO;
+import common.PageUtil;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import search.SearchDAO;
+
+public class RecmdController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		RecmdDAO dao1 = new RecmdDAO();
+		SearchDAO dao2 = new SearchDAO();
+		String url = request.getRequestURI();
+
+		if (url.contains("list.do")) {
+			// 페이지 시작 → 목록 가져오기
+			// System.out.println("list.do: " + request.getParameter("opt"));
+			String option = "";
+			if (request.getParameter("opt") != null) {
+				option = request.getParameter("opt");
+			}
+			System.out.println("list.do, option=" + option);
+			List<BookDTO> list = null;
+			String resultPage = "";
+			if (option.equals("")) {
+				option = "opt1";
+				System.out.println("list.do, option=공백일때");
+				list = dao1.getList(option);
+				resultPage = "/user/book/main.jsp";
+			} else if (!option.equals("")) {
+				System.out.println("list.do, option=" + option);
+				list = dao1.getList(option);
+				resultPage = "/user/book/recommend.jsp";
+			}
+			request.setAttribute("list", list);
+			request.setAttribute("opt", option);
+			System.out.println("recmd 컨트롤러: " + option);
+			RequestDispatcher rd = request.getRequestDispatcher(resultPage);
+			rd.forward(request, response);
+		} else if (url.contains("showModal.do")) {
+			List<Map<String, Object>> list = null;
+			list = dao1.getList();
+			request.setAttribute("list", list);
+			System.out.println("showModal.do: " + list);
+			RequestDispatcher rd = request.getRequestDispatcher("/user/book/modal1.jsp");
+			rd.forward(request, response);
+		} else if (url.contains("search.do")) {
+			// 관리자 → 도서 검색
+			String keyword = request.getParameter("keyword");
+			List<BookDTO> list = dao2.totSearch(keyword);
+			request.setAttribute("list", list);
+			RequestDispatcher rd = request.getRequestDispatcher("/user/book/autocomplete.jsp");
+			rd.forward(request, response);
+		} else if (url.contains("insert.do")) {
+			// 사서추천탭에 inert
+			int b_id = Integer.parseInt(request.getParameter("b_id"));
+			String a_id = request.getParameter("a_id");
+			Map<String, Object> map = new HashMap<>();
+			map.put("b_id", b_id);
+			map.put("a_id", a_id);
+			String result = dao1.insert(map);
+			request.setAttribute("result", result);
+		} else if (url.contains("delete.do")) {
+			String option = request.getParameter("opt");
+			if (option.equals("all")) {
+				dao1.delete(option);
+			} else {
+				String[] idx = request.getParameterValues("idx");
+				if (idx != null) {
+					for (int i = 0; i < idx.length; i++) {
+						dao1.delete(Integer.parseInt(idx[i]));
+						System.out.println("컨트롤러 delete" + idx[i]);
+					}
+				}
+			}
+			RequestDispatcher rd = request.getRequestDispatcher("/user/search/modal1.jsp");
+			rd.forward(request, response);
+		}
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
+	}
+
+}

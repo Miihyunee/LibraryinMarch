@@ -1,0 +1,554 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="http://code.jquery.com/jquery-3.7.1.min.js"></script>
+<link rel="icon" href="/syLibrary/resources/images/sist.png" type="image/x-icon">
+<link rel="stylesheet" href="/syLibrary/include/css/bootstrap.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+<script src="/syLibrary/include/js/bootstrap.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script>
+$(function() {
+	// 키워드 통합검색 이벤트 처리
+	$("#btnSearch").click(function() {
+		let form1 = $("form[name=form1]");
+        let keyword	= $("input[name=keyword]");
+		let view	= $("input[name=viewOpt]").val();
+		/* if(keyword.val() == "" || keyword.val().trim().length==0 ){
+			alert("검색어를 입력해주세요");
+			$('#keyword').val("");
+			keyword.focus();
+			return false;
+		} */
+		form1.submit();
+	});
+
+	// 상세검색 이벤트 처리
+	$("#btnDetail").click(function() {
+		let form2 = $("form[name=form2]");
+	    let b_name	= $("input[name=b_name]");
+	    let b_author= $("input[name=b_author]");
+	    let b_pub	= $("input[name=b_pub]");
+	    let view	= $("input[name=viewOpt]:checked").val();
+	    if(b_name.val()=="" && b_author.val()=="" && b_pub.val()==""){
+    		alert("검색어를 입력해주세요");
+    		b_name.focus();
+    		return false;
+	    }
+	    form2.submit();
+	}); 
+	
+	// 상세검색창 토글버튼
+	$("#btnShow").click(function() {
+		$(".searchForm2").slideDown("fast");
+		$("#btnShow").hide();
+		$("#btnHide").show();
+	});
+	$("#btnHide").click(function() {
+		$(".searchForm2").slideUp("fast");
+		$("#btnShow").show();
+		$("#btnHide").hide();
+	});
+	
+	// 결과 뷰 전환
+	$(".btnRdo").click(function(){
+		let e = $(this).val();    
+		if(e == "view1"){ 
+			$("input[name=viewOpt][value='view1']").prop('checked', true);
+		}
+		if(e == "view2"){ 
+			$("input[name=viewOpt][value='view2']").prop('checked', true);
+		} 
+		let page=$("input[name=page]").val();
+		console.log(page+", "+e);
+		moveTo(page);
+	});	
+});
+
+function searchByName(cnt) {
+    let b_name = $("input[name=keyword]").val();
+    let view= $("input[name=viewOpt]:checked").val();
+    console.log(b_name+" & "+view);
+
+    $("#text").html("결과 내 검색 - <span>[제목]:"+b_name+"&nbsp;[저자]:&nbsp;&nbsp;[발행처]:&nbsp;&nbsp;</span>에 대한 검색결과, 총 <span>"+cnt+"</span> 건");
+    let params={"b_name":b_name, "view":view};
+    if(${cntRec.cntName}!==0){
+    	$.ajax({
+			url:"/syLibrary/search_servlet/serachBy.do",
+			data:params,
+			success:function(txt){
+				$("#section-resultList").html(txt);
+			}
+		});
+    }
+}
+function searchByAuthor(cnt) {
+    let b_author = $("input[name=keyword]").val();
+    let view= $("input[name=viewOpt]:checked").val();
+    console.log(b_author+" & "+view);
+
+    $("#text").html("결과 내 검색 - <span>[제목]:&nbsp;&nbsp;[저자]:"+b_author+"&nbsp;[발행처]:&nbsp;&nbsp;</span>에 대한 검색결과, 총 <span>"+cnt+"</span> 건");
+    let params={"b_author":b_author, "view":view};
+    if(${cntRec.cntAuthor}!==0){
+    	$.ajax({
+			url:"/syLibrary/search_servlet/serachBy.do",
+			data:params,
+			success:function(txt){
+				$("#section-resultList").html(txt);
+			}
+		});
+    }
+}
+function searchByPub(cnt) {
+	let b_pub = $("input[name=keyword]").val();
+	let view= $("input[name=viewOpt]:checked").val();
+	console.log(b_pub+" & "+view);
+	
+	$("#text").html("결과 내 검색 - <span>[제목]:&nbsp;&nbsp;[저자]:&nbsp;&nbsp;[발행처]:"+b_pub+"&nbsp;</span>에 대한 검색결과, 총 <span>"+cnt+"</span> 건");
+    let params={"b_pub":b_pub, "view":view};
+    if(${cntRec.cntPub}!==0){
+    	$.ajax({
+			url:"/syLibrary/search_servlet/serachBy.do",
+			data:params,
+			success:function(txt){
+				$("#section-resultList").html(txt);
+			}
+		});
+    }
+}
+
+function moveTo(page){
+	let keyword=$("#keyword").val();
+	let option="all";
+	let view= $("input[name=viewOpt]:checked").val(); // 검색결과목록 뷰 타입 설정
+	let params={"keyword":keyword, "view":view, "page":page, "option":option};
+	$.ajax({
+		url:"/syLibrary/search_servlet/moveTo.do",
+		data:params,
+		success:function(txt){
+			console.log("[moveTo] keyword:"+keyword+", view: "+view+", page:"+page+", option:"+option);
+			$("#section-resultList").html(txt);
+		}
+	});	
+}
+
+//사이드바 collapse()
+function collapse(element) {
+	let content = element.nextElementSibling;
+	element.classList.toggle("active");         // 활성화 여부 toggle
+	
+	if (content.style.maxHeight != 0) {         // 버튼 다음 요소가 펼쳐져 있으면
+		content.style.maxHeight = null;         // 접기
+	} else {
+		content.style.maxHeight = content.scrollHeight + "px";  // 접혀있는 경우 펼치기
+	}
+}
+
+//예약신청하기	
+function reserve(b_id){ 
+	alert("예약신청이 완료되었습니다.");  
+	location.href="/syLibrary/res_book_servlet/res_book.do?b_id="+b_id+"&m_id=${sessionScope.mId}"; 	
+  } 
+
+// 대출신청하기
+function checkOut(b_id){
+	let m_id = "${sessionScope.mId}" != null? "${sessionScope.mId}":"";
+	let a_id = "${sessionScope.a_id}" !=null? "${sessionScope.a_id}":"";
+	//console.log("111="+m_id+"/ "+a_id);
+	if(m_id != ""){
+		//console.log("222="+m_id+"/ "+a_id);
+		$.ajax({
+			url:"/syLibrary/checkout_servlet/checkout.do",
+			data:{"m_id":m_id,"b_id":b_id},
+			success: function(txt){
+				alert(txt);
+				location.reload();
+			},
+			error: function(request, status, error){
+				console.log("code= "+request.status+", msg= "+request.responseText+", error= "+error);
+				alert("code= "+request.status+", msg= "+request.responseText+", error= "+error);
+			}
+		});
+	}else if(a_id != ""){
+		//console.log("333="+m_id+"/ "+a_id);
+		alert("관리자로 로그인 중입니다.\권한 문의바랍니다.");	
+	}else if(m_id=="" && a_id==""){
+		//console.log("444="+m_id+"/ "+a_id);
+		if(confirm("로그인 후 이용가능합니다.\n로그인 하시겠습니까?")){
+			location.href="/syLibrary/user/login/login.jsp";
+		}
+	}
+}
+</script>
+
+<style>
+/* 페이지레이아웃 잡기 */
+body {
+	background: #fbf7f5 !important;
+}
+
+div{
+    /*border: 1px solid red;	/*테스트용 아웃라인*/
+    box-sizing: border-box;
+}
+.wrap-all{ /*전체화면을 감싸는 div*/
+    min-width: 540px;
+    min-height: 405px; 
+    padding: 0 5% 0 5%; 
+    margin: auto;
+}
+.wrap-all > div{ /* .wrap 안에 div */
+    width: 100%;
+    margin: auto%;
+}
+#header{
+	height: 15%;
+}
+#footer{
+	height: 5%;
+}
+#contents{
+    height: 80%;
+}
+
+#contents > div{
+    height: 100%;
+    float: left;
+}
+#section-right{
+    width: 10%;
+    min-width: 120px;
+}
+#section-main{
+    width: 90%;
+    padding-left: 1%;
+}
+ 
+#title .nav-item {
+  /* padding: 0 1em 0 1em ; */
+  padding-right: 1em;
+}
+#title .nav-link, .page-item > .page-link {
+  color: #777777 !important;
+}
+
+.card-header-tabs .nav-link{
+	color: #212529BF;
+}
+
+.card-header-tabs .active{
+ 	color: #000;
+	font-weight:bold;
+}
+
+#contents .collapsible {
+	background-color: #FAE0E0;
+	color: #343a40;	
+	cursor: pointer;
+	width: 100%;
+	border: none;
+	text-align: left;
+	outline: none;
+	font-size: 15px;
+}
+
+#contents .content {
+	color: #343a40;	
+	padding: 0 1rem;
+	max-height: 0px;
+	overflow: hidden;
+	transition: max-height 0.2s ease-out;
+	background-color: #f1f1f1;
+}
+
+#sidebar .collapsible:after {
+	content: '\002B';
+	color: #343a40;	
+	font-weight: bold;
+	float: right;
+}
+
+#sidebar .active:after {
+	content: "\2212";
+}
+
+#keyword, #btnSearch {
+border-color:lightpink;
+outline: none;
+}
+#btnReset, #btnDetail {
+background-color: #FAE0E0;
+border-color:lightpink;
+outline: none;
+}
+#inputGroup-sizing-sm, #b_name, #b_author, #b_pub {
+border-color:lightpink;
+}
+
+.toggleBtn {
+	padding: 0.5rem;
+	cursor: pointer;
+	margin: auto;
+	display: block;
+	border: none;
+}
+
+#card-title .nav-link {
+  color: black !important;
+}
+.card-1{
+box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24) !important;
+} 
+.col-10{
+vertical-align:middle;
+align-items: center;
+}
+
+h4 > span{
+font-weight: bold;
+color: crimson;
+}
+
+td > a{
+color: black;
+font-weight:bold;
+}
+
+#section-resultList{
+margin: 0.5% 0 2% 0;
+}
+</style>
+</head>
+
+<body>
+<div class="wrap-all"><!-- wrap-all  -->
+<div id="header"><!-- header -->
+<%@ include file="../common/header.jsp"%>
+
+<%-- <!-- 상단메뉴 menubar -->
+<div class="container-fluid" id="menubar">
+	<ul class="nav nav-underline" id="title">
+	  <li class="nav-item">
+	    <a class="nav-link active" href="/syLibrary/user/search/search.jsp">&nbsp;&nbsp;&nbsp;자료찾기&nbsp;&nbsp;&nbsp;</a>
+	  </li>
+	  <li class="nav-item">
+		<c:choose>
+			<c:when test="${sessionScope.mName != null}">
+			<a class="nav-link" href="/syLibrary/myLibrary_servlet/myLibray_info.do?mId=${sessionScope.mId}">&nbsp;&nbsp;&nbsp;나의서재&nbsp;&nbsp;&nbsp;</a>
+			</c:when>
+			
+			<c:when test="${sessionScope.a_id !=null}">
+			<a class="nav-link" href="#" onclick="alert('관리자로 로그인 중입니다.\권한 문의바랍니다.');">&nbsp;&nbsp;&nbsp;나의서재&nbsp;&nbsp;&nbsp;</a>
+			</c:when>
+			
+			<c:otherwise>
+			<a class="nav-link" href="#" onclick="alert('로그인 후 이용가능합니다.');">&nbsp;&nbsp;&nbsp;나의서재&nbsp;&nbsp;&nbsp;</a>
+			</c:otherwise>
+		</c:choose>				
+	  </li>
+	  <li class="nav-item">
+	    <a class="nav-link" href="/syLibrary/user/info/guide.jsp">&nbsp;&nbsp;&nbsp;이용안내&nbsp;&nbsp;&nbsp;</a>
+	  </li>
+	</ul>
+</div><!-- 상단메뉴 menubar 끝 --> --%>
+
+<div class="page-direction" style="padding: 1%">
+	<div class="navi">
+		<span>HOME</span> <i class="bi bi-chevron-right"></i>
+		<span>자료찾기</span> <i class="bi bi-chevron-right"></i> 
+		<span style="font-weight:bold;">소장자료검색</span>
+	</div>
+	<hr>
+</div><!-- page-direction 끝 -->
+</div><!-- header 끝 -->
+
+
+<!-- 메인 contents -->
+<div id="contents" class="d-flex min-vh-100">
+<div id="section-right"><!-- 사이드메뉴 section-right -->
+<div class="visible-md visible-lg" id="sidebar">
+<ul class="list-unstyled ps-0">
+	<li class="mb-1">
+		<button class="collapsible" onclick="collapse(this)">
+			소장자료검색
+		</button>
+		<div class="content" id="internal">
+			<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+				<li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded" onclick="searchByName('${cntRec.cntName}')">제목(<b>${cntRec.cntName}</b>)</a></li>
+				<li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded" onclick="searchByAuthor('${cntRec.cntAuthor}')">저자(<b>${cntRec.cntAuthor}</b>)</a></li>
+				<li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded" onclick="searchByPub('${cntRec.cntPub}')">발행처(<b>${cntRec.cntPub}</b>)</a></li>
+			</ul>
+		</div>
+	</li>
+</ul>
+</div><!-- sidebar 끝 -->
+</div><!-- 사이드메뉴 section-right 끝 -->
+
+<!-- section-main -->
+<div id="section-main" class="d-flex-col">
+<div class="card text-center card-1"><!-- 검색툴 -->
+	<div class="card-header" style="background-color: #FAE0E0;">
+		<ul class="nav nav-tabs card-header-tabs" id="card-title">
+			<li class="nav-item">
+			  <a class="nav-link active" style="cursor:none">소장자료검색</a>
+			</li>
+		</ul>
+	</div><!-- card-header 끝 -->
+	
+	<div class="card-body">
+		<div class="searchForm1" align="center" style="width: 100%;">
+			<form name="form1" method="post" action="/syLibrary/search_servlet/search.do">
+			<div class="input-group mb-3">
+	  			<input name="keyword" id="keyword" value="${keyword}" type="text" class="form-control" placeholder="검색어를 입력하세요">
+	  			<button class="btn btn-light" type="button" id="btnSearch" style="background-color: #FAE0E0;">
+					<i class="bi bi-search"></i>
+				</button>
+			</div>
+			</form>
+		</div><!-- searchForm1 끝 -->
+
+		<!-- 상세검색툴 -->
+		<div class="searchForm2" style="display: none; padding: 0 3rem 1rem 3rem">
+			<form name="form2" method="post" action="/syLibrary/search_servlet/detailSearch.do" >
+				<div class="input-group input-group-md mb-3">
+					<span class="input-group-text" id="inputGroup-sizing-sm">&nbsp;&nbsp;제목&nbsp;&nbsp;&nbsp;&nbsp;</span>
+						<input type="text" class="form-control" id="b_name" name="b_name" value="${b_name}" placeholder="예: 책제목">
+				</div>
+				<div class="input-group input-group-md mb-3">
+					<span class="input-group-text" id="inputGroup-sizing-sm">&nbsp;&nbsp;저자&nbsp;&nbsp;&nbsp;&nbsp;</span>
+						<input type="text" class="form-control" id="b_author" name="b_author" value="${b_author}"placeholder="예: 홍길동">
+				</div>
+				<div class="input-group input-group-md mb-3">
+					<span class="input-group-text" id="inputGroup-sizing-sm">&nbsp;&nbsp;발행처&nbsp;</span>
+						<input type="text" class="form-control" id="b_pub" name="b_pub" value="${b_pub}" placeholder="예: 가나출판사">
+				</div>
+		
+				<div class="d-flex justify-content-end" >
+					<button type="reset" class="btn btn-light" id="btnReset">입력초기화</button>
+					&nbsp;
+					<button type="button" class="btn btn-light" id="btnDetail">&nbsp;&nbsp;상세검색&nbsp;&nbsp;</button>
+				</div>
+			</form><!-- form2 끝 -->
+		</div><!-- searchForm2 끝 -->
+
+		<button class="toggleBtn btn btn-sm btn-light" type="button" id="btnShow"><i class="bi bi-chevron-double-down"></i></button>
+		<button class="toggleBtn btn btn-sm btn-light" type="button" id="btnHide" style="display: none;"><i class="bi bi-chevron-double-up"></i></button>
+	</div><!-- card-body 끝 -->
+</div><!-- 검색틀 끝 -->
+<br>	
+<br>
+<!-- section-result -->
+<div id="section-result" class="d-flex-col">
+
+<!-- summary(default) -->
+<div class="d-flex summary" id="summary1" name="summary1"  style="width:100%">
+	<div class="col-10" >
+		<input type="hidden" name="option" value="${option}">
+		<h4 id="text"><span>[검색어]:${keyword} </span>에 대한 검색결과, 총 <span>${count}</span> 건</h4>
+	</div>
+	<div class="d-inline-flex col-2 justify-content-end">
+		<input type="radio" class="btn-check btnRdo" name="viewOpt" id="view1" value="view1" checked>
+		<label class="btn btn-light" for="view1"><i class="bi bi-distribute-vertical"></i></label>
+		
+		<input type="radio" class="btn-check btnRdo" name="viewOpt" id="view2" value="view2">
+		<label class="btn btn-light" for="view2"><i class="bi bi-grid-fill"></i></label>
+	</div>
+</div> <!-- summary(default) 끝 -->
+
+<!-- 결과목록 section-resultList -->
+<div id="section-resultList" class="card-1" style="background-color:white;">
+<!-- view1 테이블뷰 : default -->
+<input type="hidden" name="page" value="${page.curPage }">
+<table class="table table-sm table-striped table-hover align-middle caption-top">
+  <c:forEach var="dto" items="${list }" varStatus="vst">
+
+	<input type="hidden" name="b_id" value="${dto.b_id }">
+	<tr style="max-height:100px;" align="center">
+		<td><img src="${dto.b_url}" alt="준비중" style="width: 100px; max-height: 150px"></td>
+		<td align="left">
+			<a href="/syLibrary/search_servlet/bookInfo.do?b_id=${dto.b_id}" style="text-decoration-line: none;">
+			<h4>${dto.b_name }</h4></a>
+			<br>${dto.b_author }
+			<br>${dto.b_pub}&nbsp;&nbsp;|&nbsp;&nbsp;${dto.b_year}
+		</td>
+		<td>
+			<div class="btn-group-vertical" style="padding:0.5rem;" role="group" aria-label="Vertical button group">
+			<c:choose>
+				<c:when test="${stateinfo[vst.index].state == 'y' }">
+					<button type="button" class="btn btn-light btnChkout" disabled>대출가능<br>(비치중)</button>
+					<button type="button" class="btn btn-light btnChkout" name="btnChkout" onclick="checkOut('${dto.b_id}')" style="background-color: #FAE0E0;">대출신청</button>
+				</c:when>
+				<c:otherwise>
+					<button type="button" class="btn btn-light btnReserv" disabled style="color:crimson;">대출불가</button>
+					<button type="button" class="btn btn-light btnReserv" name="btnReserv" onclick="reserve('${dto.b_id}')" style="background-color: #FAE0E0;">예약신청</button> 
+				</c:otherwise> 
+			</c:choose>	
+			</div><!-- btn-group-vertical 끝 -->
+		</td>
+	</tr>
+  </c:forEach>
+</table> 
+
+<!-- 페이지 이동툴 -->
+  <div class="d-flex justify-content-center page-tool">
+	<nav class="page-navibar" aria-label="Page navigation example"><!-- page-navibar -->
+	  <ul class="pagination">
+	 
+	  <c:if test="${page.curPage > 1 }">
+		<li class="page-item"><a class="page-link" href="#" aria-label="Start">
+			<span aria-hidden="true" onclick="moveTo('1')"><i class="bi bi-chevron-double-left"></i></span>
+		</a></li>
+	  </c:if>
+	  <c:if test="${page.curBlock > 1 }">
+		 <li class="page-item">
+		  <a class="page-link" href="#" aria-label="Previous">
+			<span aria-hidden="true" onclick="moveTo('${page.prevPage}')"><i class="bi bi-chevron-left"></i></span>
+		  </a>
+		</li>  
+	  </c:if>
+	  
+	  <c:forEach var="num" begin="${page.blockStart }" end="${page.blockEnd }">
+		<c:choose>
+			<c:when test="${num==page.curPage} ">
+			  <li class="page-item"><a class="page-link" href="#"><strong>${num }<strong></a></li>
+			</c:when>
+			<c:otherwise>
+			  <li class="page-item"><a class="page-link" href="#" onclick="moveTo('${num}')">${num }</a></li>
+			</c:otherwise>
+		</c:choose>	
+	  </c:forEach>
+	  
+	  <c:if test="${page.curBlock < page.totBlock}">
+		<li class="page-item"><a class="page-link" href="#" aria-label="Next">
+			<span aria-hidden="true" onclick="moveTo('${page.nextPage}')"><i class="bi bi-chevron-right"></i></span>
+		</a></li>
+	  </c:if>
+	  <c:if test="${page.curPage < page.totPage }">
+		<li class="page-item"><a class="page-link" href="#" aria-label="End">
+			<span aria-hidden="true" onclick="moveTo('${page.totPage}')"><i class="bi bi-chevron-double-right"></i></span>
+		</a></li>
+	  </c:if>
+	
+	  </ul><!-- pagination 끝 -->
+	</nav><!-- page-navibar 끝 -->
+  </div><!-- 페이지 이동툴 끝  -->
+</div><!-- #section-resultList 끝 -->
+</div><!-- #section-result 끝 -->	
+	
+	
+</div><!-- section-main 끝 -->
+</div><!-- contents 끝 -->
+
+
+<div id="footer">
+<%@ include file="../common/footer.jsp"%>
+</div><!-- footer 끝 -->
+</div><!-- wrap-all 끝 -->
+
+</body>
+</html>

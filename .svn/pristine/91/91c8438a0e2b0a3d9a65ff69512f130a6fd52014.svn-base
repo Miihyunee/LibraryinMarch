@@ -1,0 +1,162 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<jsp:include page="../common/header.jsp"></jsp:include>
+<head>
+<meta charset="UTF-8">
+<script src="http://code.jquery.com/jquery-3.7.1.js"></script>
+<script>
+	/* 아이디 저장 기능 */
+	$(function() {
+		// 쿠키값 가져오기
+		var cookieId = getCookie();
+		if (cookieId != "") {
+			$("#mId").val(cookieId);
+			$("#idSave").attr("checked", true);
+		}
+
+		// 아이디 저장 체크
+		$("#idSave")
+				.on(
+						"click",
+						function() {
+							var _this = this;
+							var isRemember;
+							if (($_this).is(":checked")) {
+								isRemember = confirm("이 PC에 로그인 정보를 저장하시겠습니까? 공공장소에서는 개인정보가 유출될 수 있으니 주의해주십시오.");
+								if (!isRemember)
+									$(_this).attr("checked", true);
+							}
+						});
+
+		//로그인 버튼 클릭 시
+		$("#login").on("click", function() {
+			if ($("#idSave").is(":checked")) { // 아이디 저장 체크
+				saveLogin($("#user_id").val());
+			} else {
+				saveLogin("");
+			}
+		});
+	});
+	
+	//로그인 정보 저장
+	function saveLogin(mId) {
+		if(mId != ""){
+			setCookie("user_id", mId, 7);
+		} else{
+			setCookie("user_id", mId, -1);
+		}
+	}
+	
+	/**
+	cookie에 Id 저장
+	@ param name : 쿠키명 
+	@ param value : 쿠키값
+	@ param expires : 유효일
+	*/
+	function setCookie(name, value, expires) {
+		var today = new Date();
+		today.setDate(today.getDate() + expires);
+		document.cookie = name + "=" + excape(value) + "; path=/; expires=" + today.toGMTString() + ";"
+	}
+	
+	/**
+	 쿠키값 가져오기
+	*/
+	function getCookie() {
+		var cookie = document.cooike + ";";
+		var idx = cookie.indexOf("mId", 0);
+		var val = "";
+		
+		if(idx != -1){
+			cookie = cookie.substring(idx, cookie.length);
+			begin = cookie.indexOf("=", 0) + 1;
+			end = cookie.indexOf(";", begin);
+		}
+	}
+</script>
+
+<c:if test="${param.message == 'error'}">
+	<script>
+		alert("아이디 또는 비밀번호를 확인해주세요.");
+	</script>
+</c:if>
+<c:if test="${param.message == 'logout'}">
+	<script>
+		alert("로그아웃 되었습니다.");
+		location.href = '/syLibrary/login_servlet/logout.do';
+	</script>
+</c:if>
+</head>
+<body>
+	<div class="container"
+		style="float: none; margin: 0 auto; margin-top: 3em">
+		<h4>로그인</h4>
+		<hr>
+		<p>로그인을 하시면 보다 더 많은 정보와 서비스를 이용하실 수 있습니다.</p>
+		<!--  로그인 입력창 -->
+		<form name="login" method="post"
+			action="/syLibrary/login_servlet/login.do">
+			<!-- 			<div class="row" style="border: 1px solid #D5D5D5; height: 300px"> -->
+			<div style="border: 1px solid #D5D5D5; height: 300px; padding: 1em">
+				<!-- <div class="col">
+				<p>추가하고 싶은 내용</p>
+				</div> -->
+				<div>
+					<div class="input-group mb-3">
+						<input type="text" class="form-control" name="mId" id="mId"
+							placeholder="아이디">
+					</div>
+					<div class="input-group mb-3">
+						<input type="password" class="form-control" name="mPasswd"
+							id="mPasswd" placeholder="비밀번호">
+					</div>
+					<div class="form-check">
+						<input type="checkbox" id="idSave" class="form-check-input">
+						<label for="idSave" class="form-check-label">아이디 저장</label>
+					</div>
+					<div class="input-group mb-3">
+						<input type="submit" value="로그인" class="btn text-white" id="login"
+							style="width: 200px; background-color: lightpink;">
+					</div>
+				</div>
+			</div>
+		</form>
+
+		<!-- 아이디 찾기, 비밀번호 찾기, 회원가입 -->
+		<div class="row d-flex align-items-center"
+			style="background-color: #EAEAEA; border: 1px solid #D5D5D5; height: 300px">
+			<div class="col text-center">
+				<div>
+					<img src="../../resources/images/login/id.png">
+				</div>
+				<div class="btnLoginBottom">
+					<a href="../login/searchId.jsp"
+						style="text-decoration-line: none; color: black;">아이디 찾기</a>
+				</div>
+			</div>
+			<div class="col text-center">
+				<div>
+					<img src="../../resources/images/login/forgot.png">
+				</div>
+				<div class="btnLoginBottom">
+					<a href="../login/searchPasswd.jsp"
+						style="text-decoration-line: none; color: black;">비밀번호 찾기</a>
+				</div>
+			</div>
+			<div class="col text-center">
+				<div>
+					<img src="../../resources/images/login/join.png">
+				</div>
+				<div class="btnLoginBottom">
+					<a href="../member/join.jsp"
+						style="text-decoration-line: none; color: black;">회원가입</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<jsp:include page="../common/footer.jsp"></jsp:include>
+</html>

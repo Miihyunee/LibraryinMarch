@@ -1,0 +1,58 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<style>
+.menu {
+	background-color: #DEB6B3;
+	width: 200px;
+	padding: 0;
+	margin: 0;
+	position: pixed;
+	height: 275px;
+	float:left;
+}
+
+.menu>.big_menu li {
+	display: block;
+	color:#000;
+	font_size: 20px;
+	padding-bottom:0;
+	font-weight: bold;
+}
+
+.sub_menu li {
+	list-style: none;
+	display: block;
+	color: #000;
+	font_size: 20px;
+	margin-left:14px; 
+	padding:0;
+}
+
+ a {
+ 	text-decoration: none;
+ }
+</style>
+<body>
+<div class="menu">
+	<ul class="big_menu">
+	<li>도서 관리</li></ul>
+	<ul class="sub_menu">
+		<li><a href="../book_servlet/list_all.do">도서 목록</a><br></li>
+		<li><a href="../book_servlet/select_cg.do">도서 등록</a><br></li>		
+	</ul>
+	<ul class="big_menu">
+	<li>대출 반납</li></ul>
+	<ul class="sub_menu">
+		<li><a href="../record_servlet/list.do">대출/반납 기록</a><br>
+			<a href="../loanBook_servlet/list.do">대출 도서 관리</a><br>
+			<a href="../rebook_servlet/list.do">예약 도서 관리</a><br></li>	
+	</ul>
+	<ul class="big_menu">
+	<li><a href="../admember_servlet/list.do">회원 정보</a></li>
+	</ul>
+</div>
+</body>
+</html>

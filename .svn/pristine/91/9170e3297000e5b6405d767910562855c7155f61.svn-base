@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memo">
+	
+	<select id="memo" resultType="admin.memo.MemoDTO">
+		select me_idx,me_memo, to_char(me_post_date, 'yyyy/mm/dd') me_post_date, me_a_id
+		from memo
+		where me_idx=#{me_idx}
+	</select>
+	
+	<insert id="insert">
+      insert into memo (me_idx, me_memo, me_post_date,me_a_id) values
+      (1, #{me_memo}, sysdate, #{me_a_id})
+   </insert>  
+   
+	<update id="update">
+		update memo set me_a_id = #{me_a_id}, me_memo=#{me_memo}, me_post_date = sysdate
+		where me_idx = #{me_idx}
+	</update>
+	
+	<delete id="delete">
+		delete from memo where me_idx = #{me_idx}
+	</delete>
+
+</mapper>

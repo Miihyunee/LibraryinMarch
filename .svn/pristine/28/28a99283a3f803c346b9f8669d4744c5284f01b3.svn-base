@@ -1,0 +1,55 @@
+package member;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+public class MemberController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String url = request.getRequestURI();
+		String path = request.getContextPath();
+		MemberDAO dao = new MemberDAO();
+		
+		
+		if (url.contains("list_memberInfo.do")) {
+			
+		} else if (url.contains("edit_memberInfo.do")) {
+			MemberDTO dto = new MemberDTO();
+			String mPasswd = request.getParameter("mPasswd");
+			String mName = request.getParameter("mName");
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			String birthdate = request.getParameter("mBirthDate");
+			String mTel = request.getParameter("mTel");
+			String mEmail = request.getParameter("mEmail");
+			String mAddress = request.getParameter("mAddress");
+			dto.setM_passwd(mPasswd);
+			dto.setM_name(mName);
+			dto.setM_tel(mTel);
+			dto.setM_email(mEmail);
+			dto.setM_address(mAddress);
+			try {
+				Date mBirthDate = format.parse(birthdate);
+				dto.setM_birth_date(mBirthDate);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			dao.edit_memberInfo(dto);
+			String page = "../member/member_eidt.jsp";
+			response.sendRedirect(path + page);
+		}
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doGet(request, response);
+	}
+}

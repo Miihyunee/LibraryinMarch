@@ -1,0 +1,73 @@
+package checkout;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import member.MemberDTO;
+
+public class CheckoutController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		String m_id = (String) session.getAttribute("m_id");
+
+		String url = request.getRequestURI();
+		String contextPath = request.getContextPath();
+		if (url.contains("checkout.do")) {
+			// 회원로그인 확인
+			if (m_id == null) {
+				response.sendRedirect(contextPath + "/user/login/login.jsp");
+			} else {
+				MemberDTO dto1 = new MemberDTO();
+				int m_loan = dto1.getM_loan(); // 회원의 도서대출 가능여부 확인
+				String result = "";
+
+				switch (m_loan) {
+				// 연체로 대출불가인지 패널티 상태 검증
+				case 1: // 대출가능 상태
+//					CheckoutDAO dao = new CheckoutDAO();
+//					if (dao.cntUserLo(m_id) >= 5) {
+//						result = "fail";
+//					} else {
+//						int b_id = Integer.parseInt(request.getParameter("b_id"));
+//						if (dao.isAvailable(b_id).equals('y')) {
+//							result = dao.checkout(m_id, b_id);
+//						}
+//					}
+//					break;
+					CheckoutDAO dao = new CheckoutDAO();
+					int b_id = Integer.parseInt(request.getParameter("b_id"));
+					result = dao.checkout(m_id, b_id);
+					break;
+				case 0: // 대출불가 상태
+					result = "fail";
+					break;
+				}
+				System.out.println("[checkout 컨트롤러]" + result);
+				// 현재 페이지 새로고침
+				Map<String, Object> map = new HashMap<String, Object>();
+				request.setAttribute("m_id", m_id);
+				request.setAttribute("result", result);
+				// String referer = request.getHeader("Referer");
+				// location.reload();
+			}
+		} else if (url.contains("#.do")) {
+			// 도서 대여상태 업데이트
+
+		}
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doGet(request, response);
+	}
+
+}

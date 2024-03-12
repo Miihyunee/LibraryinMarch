@@ -1,0 +1,67 @@
+package member;
+
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+public class AdmemberController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String url = request.getRequestURI();
+		/* String path = request.getContextPath(); */
+		AdmemberDAO dao = new AdmemberDAO();
+		if(url.indexOf("ad_list.do") != -1) {
+			
+			MemberDTO dto = new MemberDTO();
+			String m_Name = request.getParameter("mName");
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			String m_Birthdate = request.getParameter("mBirthDate");
+			String m_Id = request.getParameter("mId");
+			String m_Tel = request.getParameter("mTel");
+			String m_Year = request.getParameter("mYear");
+			dto.setM_name(m_Name);
+			dto.setM_tel(m_Tel);
+			dto.setM_id(m_Id);
+			try {
+				Date mBirthDate = format.parse(m_Birthdate);
+				Date mYear = format.parse(m_Year);
+				dto.setM_birth_date(mBirthDate);
+				dto.setM_year(mYear);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			
+			String search_option = request.getParameter("search_option");
+			if (search_option==null||search_option.equals(""))
+				search_option = "a_name";
+			String search = request.getParameter("search");
+			if(search==null)
+				search = "";
+			
+			List<Map<String,Object>> list = dao.ad_list(search_option,search,dto);
+			System.out.println("a=" + list);
+//			request.setAttribute("items",items);
+			request.setAttribute("list",list);
+			request.setAttribute("search_option", search_option);
+			request.setAttribute("search",search);
+			String page = "/admin/admin_m_list.jsp";
+			RequestDispatcher rd = request.getRequestDispatcher(page);
+			rd.forward(request,response);
+		}
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
+	}
+
+}

@@ -1,0 +1,105 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../include/css/bootstrap.css">
+<script src="http://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="../include/js/bootstrap.js"></script>
+<!-- IONICONS -->
+<script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+<c:if test="${param.message=='error'}">
+	<script>
+		alert("관리자 아이디 또는 비밀번호가 일치하지 않습니다.");
+	</script>
+</c:if>
+<c:if test="${param.message=='logout'}">
+	<script>
+		alert("로그아웃 되었습니다.");
+	</script>
+</c:if>
+<script>
+$(function() {
+	$("#btnlogin").click(function() {
+		if ($("#a_id").val() == "") {
+			alert("아이디를 입력하세요.");
+			return;
+		} else ($("#a_passwd").val() == "") {
+			alert("비밀번호를 입력하세요.");
+			return;
+		}
+	});
+});
+
+function login(){
+	location.href="/syLibrary/admin_servlet/adlogin.do?a_id=${a_id}&a_passwd=${a_passwd}";
+}
+function memo(){
+	location.href="/syLibrary/memo_servlet/memo.do";
+}
+</script>
+<style>
+Header {  
+  height: 75px;
+  padding: 1rem;
+  color: white;
+  background: #DEB6B3;
+  font-weight: bold;
+  font-size: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+ion-icon {
+  font-size: 40px;
+  align-items: center;
+  justify-content: space-between;
+}
+.form-signin{
+    max-width: 400px;
+    position: absolute;
+    width: 100%;
+    padding: 10px;
+    top: 50%; /* 전체 높이 위에서부터 절반 */
+    left: 50%; /* 전체 넓이 왼쪽에서부터 절반 */
+    transform: translate(-50%, -50%); /* 해당 요소의 높이, 넓이의 절반만큼 돌아가기 */
+  	border: 1px solid black;
+  }
+</style>
+</head> 
+<body>
+<header>
+	<nav>
+		<div class="container-fluid">
+			<a class="navbar-brand">
+				<ion-icon name="book-outline"></ion-icon>
+				<a>Manager</a>
+			</a>
+		</div>
+	</nav>
+</header>
+<main class="form-signin">
+	<h2 align="center">관리자 로그인</h2>
+		<form method="post" name="form1" action="/syLibrary/admin_servlet/adlogin.do">
+			<table align="center">
+			<tr>
+				<td>아이디</td>
+				<td><input id="a_id" name="a_id"></td>
+			</tr>
+			<tr>
+				<td>비밀번호</td>
+				<td><input id="a_passwd" type="password" name="a_passwd"></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center">
+				<input type="submit" id="btnlogin" value="로그인" class="">
+				</td>
+			</tr>
+			</table>
+		</form>
+</main>
+</body>
+</html>

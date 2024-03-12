@@ -1,0 +1,22 @@
+package admin.login;
+
+import org.apache.ibatis.session.SqlSession;
+
+import admin.memo.MemoDTO;
+import sqlmap.MybatisManager;
+
+public class AdminDAO {
+	public String login(AdminDTO dto) {
+		SqlSession session = MybatisManager.getInstance().openSession();
+		String a_name = session.selectOne("admin_login.login",dto);
+		session.close();
+		return a_name;
+	}
+
+	public MemoDTO list(int me_idx) {
+		SqlSession session = MybatisManager.getInstance().openSession();
+		MemoDTO map = session.selectOne("memo.memo",me_idx);
+		session.close();
+		return map;
+	}
+}

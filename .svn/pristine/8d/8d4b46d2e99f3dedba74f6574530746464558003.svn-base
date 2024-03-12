@@ -1,0 +1,46 @@
+package checkout;
+
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+
+import admin.l_book.ReBookDTO;
+import sqlmap.MybatisManager;
+
+public class ResBookDAO {
+
+	public void insert_resbook(Map<String, Object> map) {
+		SqlSession session = MybatisManager.getInstance().openSession();
+		session.insert("res_book.insert_book", map);
+		session.commit();
+		session.close();
+	}
+
+	public int count() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	public List<ReBookDTO> list(int start, int end) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void update_order(String r_regdate) { //예약 순서대로 자동으로 순번 부여 +1
+		// TODO Auto-generated method stub
+		
+	}
+}	
+
+
+/*
+ * public void update_order(int group_num, int re_order) { // 답변 순서정리  -> 목록 순서 정리
+ *  SqlSession session = null; try { session = MybatisManager.getInstance().openSession();
+ * Map<String, Object> map = new HashMap<>(); map.put("group_num", group_num);
+ * map.put("re_order", re_order); session.update("board.update_order", map);
+ * session.commit(); } catch (Exception e) { e.printStackTrace(); } finally { if
+ * (session != null) session.close(); } }
+ */

@@ -1,0 +1,87 @@
+package review;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+public class ReviewController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		ReviewDAO dao = new ReviewDAO();
+		String url = request.getRequestURI();
+		if (url.contains("getReviews.do")) {
+			int b_id = Integer.parseInt(request.getParameter("b_id"));
+			List<ReviewDTO> reviews = dao.getReviews(b_id);
+			request.setAttribute("reviews", reviews);
+			String result = "/user/search/reviews.jsp";
+			System.out.println("컨트롤러-getReview: " + reviews);
+			RequestDispatcher rd = request.getRequestDispatcher(result);
+			rd.forward(request, response);
+
+		} else if (url.contains("insert.do")) {
+			String result = "";
+			String m_id = request.getParameter("mId");
+			int b_id = Integer.parseInt(request.getParameter("b_id"));
+			String contents = request.getParameter("contents");
+			ReviewDTO dto = new ReviewDTO(m_id, b_id, contents);
+			dto.setM_id(m_id);
+			dto.setB_id(b_id);
+			dto.setContents(contents);
+			result = dao.insert(dto);
+			System.out.println("컨트롤러-insert: " + result);
+			response.getWriter().println(result);
+
+		} else if (url.contains("delete.do")) {
+			String option = request.getParameter("option");
+			String result = "";
+			int idx = Integer.parseInt(request.getParameter("idx"));
+			switch (option) {
+			case "user":
+				String m_id = request.getParameter("m_id");
+				Map<String, Object> map = new HashMap<>();
+				map.put("m_id", m_id);
+				map.put("idx", idx);
+				result = dao.delete(option, map);
+				System.out.println("컨트롤러-회원 delete: id(" + m_id + "), idx(" + idx + "), result(" + result + ")");
+				break;
+			case "admin":
+				String arr = request.getParameter("arr");
+				System.out.println("arr:" + arr);
+				String[] values = arr.split(",");
+				System.out.println("values:" + values);
+
+				if (values != null) {
+					try {
+						for (int i = 0; i < values.length; i++) {
+							dao.delete(Integer.parseInt(values[i]));
+							System.out.println("컨트롤러 관리자 삭제" + values[i]);
+						}
+						result = "Complete";
+					} catch (Exception e) {
+						result = "Error";
+						e.printStackTrace();
+					}
+				}
+
+				response.getWriter().println(result);
+				System.out.println("컨트롤러-관리자 delete:" + result);
+				break;
+			}
+		}
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doGet(request, response);
+	}
+
+}

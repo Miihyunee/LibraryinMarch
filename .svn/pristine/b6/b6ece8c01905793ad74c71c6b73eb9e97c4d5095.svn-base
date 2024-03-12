@@ -1,0 +1,47 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<canvas id="myChart" width="300" height="250"></canvas>
+<script src="../include/js/Chart.min.js"></script>
+
+<script>
+new Chart(ctx, {
+    type: 'pie', // bar, pie, line, doughnut, polarArea 옵션들을 선택할수 있습니다.
+    data: {
+        datasets: [{
+            data: [15, 50, 15, 20], //데이터 수치를 넣으면 자동으로 조절이 됩니다.(10% 이하는 텍스트 노출이 안됩니다. 👇formatter 함수 참고)
+            backgroundColor: ['#FB3640', '#EFCA08', '#43AA8B', '#253D5B']
+        }],
+        labels: labels
+    },
+    options: {
+        responsive: true,
+      
+        legend: {
+            position: 'bottom'
+        },
+        plugins: {
+            datalabels: {
+                color: ['#fff', '#fff', '#fff', '#fff'],
+                borderWidth: 2,
+                borderColor: ['#fff', '#fff', '#fff', '#fff'],
+                borderRadius : 25,
+                anchor: 'center',
+                formatter: function(value, context) {
+                    return (value > 10) ? value+ "%" : null //data가 10 미만이면 숫자 값은 출력되지 않습니다.
+                }
+            },
+        }
+    }
+});
+</script>
+
+</head>
+<body>
+
+</body>
+</html>

@@ -1,0 +1,84 @@
+package recommend;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+
+import admin.book.BookDTO;
+import sqlmap.MybatisManager;
+
+public class RecmdDAO {
+	// 사용자 탭 선택 → 목록 가져오기
+	public List<BookDTO> getList(String option) {
+		SqlSession session = null;
+		List<BookDTO> list = new ArrayList<>();
+		try {
+			session = MybatisManager.getInstance().openSession();
+			switch (option) {
+			case "opt1":
+				list = session.selectList("recommend.opt1");
+				break;
+
+			case "opt2":
+				list = session.selectList("recommend.opt2");
+
+				break;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return list;
+	}
+
+	public void insert(Map<String, Object> map) {
+		SqlSession session = null;
+		try {
+			session = MybatisManager.getInstance().openSession();
+			session.insert("recommend.recmd_insert", map);
+			session.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null)
+				session.close();
+		}
+	}
+
+	// clearAll
+	public void delete(String option) {
+		SqlSession session = null;
+		try {
+			session = MybatisManager.getInstance().openSession();
+			session.delete("recommend.recmd_insert");
+			session.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("recmd clearAll 에러발생");
+		} finally {
+			if (session != null)
+				session.close();
+		}
+	}
+
+	// 데이터 선택 삭제
+	public void delete(int idx) {
+		SqlSession session = null;
+		try {
+			session = MybatisManager.getInstance().openSession();
+			session.delete("recommend.delete", idx);
+			session.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("recmd delete 에러: "+"");
+		} finally {
+			if (session != null)
+				session.close();
+		}
+	}
+
+}

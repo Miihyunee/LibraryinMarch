@@ -1,0 +1,46 @@
+package myLibrary;
+
+import java.io.IOException;
+import java.util.List;
+
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+public class MyLibraryController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String url = request.getRequestURI();
+		String path = request.getContextPath();
+		MyLibraryDAO dao = new MyLibraryDAO();
+		// 나의 서재
+		if (url.contains("myLibray_info.do")) {
+			String mId = request.getParameter("mId");
+			MyLibraryDTO dto = dao.myLibrary_list(mId);
+			request.setAttribute("dto", dto);
+			RequestDispatcher rd = request.getRequestDispatcher("/user/book/myLibrary.jsp");
+			rd.forward(request, response);
+		} else if (url.contains("myLoanBook.do")) { // 나의 대출 도서 현황
+			int mNo = Integer.parseInt(request.getParameter("mNo"));
+			MyLibraryDTO dto = dao.myLoanBook(mNo);
+			request.setAttribute("dto", dto);
+			RequestDispatcher rd = request.getRequestDispatcher("/user/book/myLibrary.jsp");
+			rd.forward(request, response);
+		} else if (url.contains("myHistory.do")) { // 나의 대출 이력
+			int mNo = Integer.parseInt(request.getParameter("mNo"));
+			MyLibraryDTO dto = dao.myHistory(mNo);
+			request.setAttribute("dto", dto);
+			RequestDispatcher rd = request.getRequestDispatcher("/user/book/myHistory.jsp");
+			rd.forward(request, response);
+		}
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doGet(request, response);
+	}
+}

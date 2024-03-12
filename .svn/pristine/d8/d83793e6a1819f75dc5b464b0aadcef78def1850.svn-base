@@ -1,0 +1,56 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<style>
+.menu {
+	background-color: #D3D3D3;
+	width: 200px;
+	padding: 0;
+	margin: 0;
+	position: pixed;
+	height: 100%;
+	overflow: auto;
+}
+
+.menu>.big_menu li {
+	display: block;
+	color:#000;
+	font_size: 20px;
+	padding-bottom:0;
+}
+
+.sub_menu li {
+	list-style: none;
+	display: block;
+	color: #000;
+	font_size: 20px;
+	margin-left:14px; 
+	padding:0;
+}
+
+ a {
+ 	text-decoration: none;
+ }
+</style>
+<body>
+<div class="menu">
+	<ul class="big_menu">
+	<li>도서 관리</li></ul>
+	<ul class="sub_menu">
+		<li><a href="#">도서 목록</a><br>
+		<a href="#">도서 등록</a><br>
+		<a href="#">도서 수정/삭제</a><br></li>		
+	</ul>
+	<ul class="big_menu">
+	<li>대출 반납</li></ul>
+	<ul class="sub_menu">
+		<li><a href="#">대출/반납 기록</a><br>
+		<a href="#">회원 대출 관리</a><br>
+		<a href="#">회원 예약 관리</a><br></li>		
+	</ul>
+	<ul class="big_menu">
+	<li><a href="#">회원 관리</a></li></ul>
+</div>
+</body>
+</html>

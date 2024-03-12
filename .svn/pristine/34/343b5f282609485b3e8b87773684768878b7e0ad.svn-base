@@ -1,0 +1,28 @@
+package member;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+
+import sqlmap.MybatisManager;
+
+public class AdmemberDAO {
+	public List<Map<String, Object>> ad_list(String search_option, String search,MemberDTO dto) {
+		SqlSession session = MybatisManager.getInstance().openSession();
+		List<Map<String, Object>> ad_items = null;
+
+		
+		if(search_option.equals("m_all")){ 
+			ad_items = session.selectList("member.ad_list_all",search);
+		} else {
+			Map<String,Object> map = new HashMap<>();
+			map.put("search_option",search_option);
+			map.put("search",search);
+			map.put("dto",dto);
+			ad_items = session.selectList("member.ad_list",map);
+		}
+		return ad_items;
+	}
+}

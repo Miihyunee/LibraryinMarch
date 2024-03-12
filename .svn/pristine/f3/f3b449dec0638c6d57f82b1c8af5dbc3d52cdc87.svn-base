@@ -1,0 +1,16 @@
+package login.DTO;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
+public class LoginDTO {
+	private String userid;
+	private String passwd;
+	private String name;
+	private String tel;
+	private String address;
+}

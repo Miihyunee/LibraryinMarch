@@ -1,0 +1,19 @@
+package login.DAO;
+
+import java.util.Map;
+
+import javax.mail.Session;
+
+import org.apache.ibatis.session.SqlSession;
+
+import login.DTO.LoginDTO;
+import sqlmap.MybatisManager;
+
+public class LoginDAO {
+
+	public String loginCheck(LoginDTO dto) {
+		SqlSession session = MybatisManager.getInstance().openSession();
+		String mName = session.selectOne("login.loginCheck", dto);
+		return mName;
+	}
+}

@@ -1,0 +1,65 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3월에 만나요:)</title>
+	<style>
+	#section1 {
+		background: #f2f4f7;
+		padding: 100px 50px 0px 50px
+		}
+		
+	.bd-placeholder-img {
+		font-size: 1.125rem;
+		text-anchor: middle;
+		-webkit-user-select: none;
+		moz-user-select: none;
+		user-select: none;
+	}
+
+	@media (min-width: 768px) {
+		.bd-placeholder-img-lg {
+			font-size: 3.5rem;
+		}
+	}
+	</style>
+</head>
+
+<body>
+
+<div id="header">
+	<%@ include file="../common/header.jsp"%>
+</div>
+
+<div id="contents">
+<!-- 검색창 배치 -->
+<section id="section1">
+<div class="d-flex justify-content-center">
+	<div class="input-group mb-3">
+	  <input name="searchbox" type="text" class="form-control" placeholder="검색어를 입력하세요" aria-label="검색어를 입력하세요">
+	  <button class="btn btn-outline-secondary" type="button" id="button-addon2">
+		<img src="../resources/images/search.png" width="80%">
+	  </button>
+	</div>
+</div>
+</section>
+
+<!-- 추천도서탭 배치-->
+<section id="section2">
+<div class=section2>
+	
+		<%@ include file="./suggestion.jsp"%>
+	
+</div>
+</section>
+</div>
+
+<div id="footer">
+	<%@ include file="../common/footer.jsp"%>
+</div>
+</body>
+</html>

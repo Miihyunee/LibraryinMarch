@@ -1,0 +1,57 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<canvas id="line-chart" width="300" height="250"></canvas>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
+<script>
+	new Chart(document.getElementById("line-chart"), {
+		type: 'bar',
+		data: {
+			labels: [1500,1600,1700,1800,1900,1950,1999,2050],
+			datasets: [{
+				data: [86,114,106,107,111,133,221,783,2478],
+				label:"Africa",
+				borderColor:"#3e95cd",
+				fill:false
+			}, {
+				data: [574,396,384,174,682,386,843,654,134],
+				label:"Asia",
+				borderColor:"#8e5ea2",
+				fill:false
+			}, {
+				data: [296,342,578,123,952,684,276,235,679],
+				label:"Europe",
+				borderColor:"#3cba9f",
+				fill:false
+			}, {
+				data: [186,452,457,897,432,456,789,454,1467],
+				label:"Latin America",
+				borderColor:"#e8c3b9",
+				fill:false
+			}, {
+				data: [485,172,675,432,567,983,457,431,388],
+				label:"North America",
+				borderColor:"#c45850",
+				fill:false
+			}
+		]
+	},
+	options: {
+		title: {
+			display: true,
+			text: 'World population per region (in millions)'
+		}
+	}
+});
+</script>
+
+</head>
+<body>
+
+</body>
+</html>

@@ -1,0 +1,66 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+     <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="http://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="/syLibrary/include/js/bootstrap.js"></script>
+<script>
+$(function() {
+	$("#chkAll").click(function() {
+		if ($("#chkAll").prop("checked")) {
+			$("input[name=idx]").prop("checked", true);
+		} else {
+			$("input[name=idx]").prop("checked", false);
+		}
+	});
+	$("#btnAllDel").click(function() {
+		document.form1.action="/jsp03/memo_servlet/delete_all.do";
+		document.form1.submit();
+	});
+});
+function memo_del(idx) {
+	location.href = "/jsp03/memo_servlet/del.do?idx=" + idx;
+}
+</script>
+</head>
+<body>
+<%-- <c:choose>
+ 	<c:when test="${list.size() == 0 }">
+	<table class="table table-hover">
+ 			<tr>
+			 	<th>작성자</th>
+			 	<th>메모</th>
+			 	<th>날짜</th>
+ 			</tr>
+			<tr>등록된 메모가 없습니다.</tr>
+		</table>
+	</c:when>
+	<c:when test="${list.size() > 0}"> --%>
+		<form method="post" name="form1">
+		<table class="table table-hover">
+ 			<tr>
+			 	<th>작성자</th>
+			 	<th>메모</th>
+			 	<th>날짜</th>
+ 			</tr>
+		 <c:forEach var="row" items="${list}">
+		  <tr>
+		  	<td>${row.a_name}</td>
+		   	<td>${row.me_memo}</td>
+		   	<td>${row.me_post_date}</td>
+			<td><input type="button" value="수정" class="btn btn-success"></td>
+<%-- 		   	<td><a href="/syLibrary/memo_servlet/list.do?idx=${row.me_a_id}"></a></td> --%>
+			<td><input type="button" value="삭제" class="btn btn-success"></td>
+			<%-- <td><input type="button" value="삭제" onclick="memo_del('${row.me_a_id}')" class="btn btn-success"></td> --%>
+			</tr>
+		  </c:forEach>
+		</table>
+		</form>
+<%-- 	</c:when>
+</c:choose> --%>
+</body>
+</html>

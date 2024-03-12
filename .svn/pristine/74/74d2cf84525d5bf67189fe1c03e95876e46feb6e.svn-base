@@ -1,0 +1,42 @@
+package member;
+
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
+import org.apache.ibatis.session.SqlSession;
+
+import sqlmap.MybatisManager;
+
+public class MemberDAO {
+	
+
+	
+	
+	
+
+	public void edit_memberInfo(MemberDTO dto) {
+		SqlSession session = MybatisManager.getInstance().openSession();
+		session.update("member.edit_memberInfo", dto);
+		session.commit();
+		session.close();
+	}
+
+	public String joinId(MemberDTO dto) {
+		SqlSession session = MybatisManager.getInstance().openSession();
+		return null;
+		
+	}
+
+	public void insert_join(MemberDTO dto) {
+		SqlSession session = MybatisManager.getInstance().openSession();
+		session.insert("member.insert_join", dto);
+		session.commit(); 
+		session.close(); 
+		
+	}
+	
+	
+	
+	
+}

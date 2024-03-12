@@ -1,0 +1,121 @@
+package search;
+
+import java.io.IOException;
+import java.util.List;
+
+import admin.book.BookDTO;
+import checkout.CheckoutDAO;
+import common.PageUtil;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+public class SearchController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		SearchDAO dao1 = new SearchDAO();
+		CheckoutDAO dao2 =new CheckoutDAO();
+		String url = request.getRequestURI();
+		String contextPath = request.getContextPath();
+
+		if (url.contains("search.do")) {
+			// 자료검색페이지 → 키워드로 통합검색(도서명, 작가, 출판사)
+			String keyword = request.getParameter("keyword"); // 검색키워드
+			String option = "all"; // 페이지 나누기용 검색옵션
+			String view = request.getParameter("view"); // 검색결과 뷰타입 옵션
+			String resultPage = "";
+			System.out.println(request.getParameter("view"));
+			if (view.equals("view1")||view==null) {
+				resultPage = "/user/book/view1.jsp";
+			} else if (view.equals("view2")) {
+				resultPage = "/user/book/view2.jsp";
+			}
+			// 페이지 설정
+			int count = dao1.resultCount(option, keyword);
+			int curPage = 1; // 페이지 초기화
+			if (request.getParameter("curPage") != null) {
+				curPage = Integer.parseInt(request.getParameter("curPage"));
+			}
+			common.PageUtil page = new PageUtil(count, curPage);
+			int start = page.getPageBegin();
+			int end = page.getPageEnd();
+
+			// 검색 결과 목록 가져오기
+			List<BookDTO> list = dao1.totSearch(keyword, start, end);
+			List<Boolean> stateinfo = dao2.onState(list);
+			request.setAttribute("list", list);
+			request.setAttribute("keyword", keyword);
+			request.setAttribute("page", page);
+			request.setAttribute("stateinfo", stateinfo);
+
+			RequestDispatcher rd = request.getRequestDispatcher(resultPage);
+			rd.forward(request, response);
+		} else if (url.contains("detailSearch.do")) {
+			String b_name = request.getParameter("b_name");
+			String b_author = request.getParameter("b_author");
+			String b_pub = request.getParameter("b_pub");
+			String option = "detail";
+			String view = request.getParameter("view");
+			String resultPage = "";
+			if (view.equals("view1")||view==null) {
+				resultPage = "/user/book/view1.jsp";
+			} else if (view.equals("view2")) {
+				resultPage = "/user/book/view2.jsp";
+			}
+			
+			// 페이지 설정
+			int count = dao1.resultCount(option, b_name, b_author, b_pub);
+			int curPage = 1; // 페이지 초기화
+			if (request.getParameter("curPage") != null) {
+				curPage = Integer.parseInt(request.getParameter("curPage"));
+			}
+			common.PageUtil page = new PageUtil(count, curPage);
+			int start = page.getPageBegin();
+			int end = page.getPageEnd();
+
+			List<BookDTO> list = dao1.detailSearch(b_name, b_author, b_pub, start, end);
+			List<Boolean> stateinfo = dao2.onState(list);
+			request.setAttribute("list", list);
+			request.setAttribute("b_name", b_name);
+			request.setAttribute("b_author", b_author);
+			request.setAttribute("b_pub", b_pub);
+			request.setAttribute("page", page);
+			request.setAttribute("stateinfo", stateinfo);
+
+			RequestDispatcher rd = request.getRequestDispatcher(resultPage);
+			rd.forward(request, response);
+		} else if (url.contains("list.do")) {
+			// 페이지 나누기 설정
+			int count = dao1.count();
+			int curPage = 1;
+			if (request.getParameter("curPage") != null) {
+				curPage = Integer.parseInt(request.getParameter("curPage"));
+			}
+			common.PageUtil page = new PageUtil(count, curPage);
+			int start = page.getPageBegin();
+			int end = page.getPageEnd();
+
+			List<BookDTO> list = dao1.pageList(start, end);
+			request.setAttribute("list", list);
+			request.setAttribute("page", page);
+			RequestDispatcher rd = request.getRequestDispatcher("/user/book/search.jsp");
+			rd.forward(request, response);
+		} else if (url.contains("bookInfo.do")) {
+			// 도서 상세정보 페이지
+//			int b_id=Integer.parseInt(request.getParameter("b_id"));
+//			List<E> info=dao.showBookInfo(b_id);
+//			request.setAttribute("item", info);
+//			RequestDispatcher rd = request.getRequestDispatcher("/user/book/bookInfo.jsp");
+//			rd.forward(request, response);
+		}
+	
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
+	}
+
+}

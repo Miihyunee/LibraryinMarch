@@ -1,0 +1,53 @@
+package login;
+
+import java.io.IOException;
+
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import login.DAO.LoginDAO;
+import login.DTO.LoginDTO;
+
+public class LoginController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String url = request.getRequestURI();
+		String path = request.getContextPath();
+		LoginDAO dao = new LoginDAO();
+		if (url.contains("login.do")) {
+			String mId = request.getParameter("mId");
+			String mPasswd = request.getParameter("mPasswd");
+			LoginDTO dto = new LoginDTO();
+			dto.setM_id(mId);
+			dto.setM_passwd(mPasswd);
+			String mName = dao.loginCheck(dto);
+			if (mName == null) {
+				String page = "/login/login.jsp?message=error";
+				response.sendRedirect(path + page);
+			} else {
+				HttpSession session = request.getSession();
+				session.setAttribute("mId", mId);
+				session.setAttribute("mName", mName);
+				request.setAttribute("result", mName + "님 환영합니다.");
+				String page = "/login/login_result.jsp";
+				RequestDispatcher rd = request.getRequestDispatcher(page);
+				rd.forward(request, response);
+			}
+		} else if (url.indexOf("searchId.do") != -1) {
+			String mEmail = request.getParameter("mEmail");
+			String mName = request.getParameter("mName");
+			String mTel = request.getParameter("mTel");
+
+		}
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doGet(request, response);
+	}
+}

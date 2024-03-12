@@ -1,0 +1,28 @@
+package myLibrary;
+
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import sqlmap.MybatisManager;
+
+public class MyLibraryDAO {
+
+	public MyLibraryDTO myLibrary_list(String mId) {
+		SqlSession session = MybatisManager.getInstance().openSession();
+		MyLibraryDTO dto = session.selectOne("myLibrary.myLibrary_info", mId);
+		session.close();
+		return dto;
+	}
+
+	public MyLibraryDTO myLoanBook(int mNo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public MyLibraryDTO myHistory(int mNo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

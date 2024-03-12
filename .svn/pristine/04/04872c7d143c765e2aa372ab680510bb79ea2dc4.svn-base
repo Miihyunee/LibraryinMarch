@@ -1,0 +1,95 @@
+package recommend;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import admin.book.BookDTO;
+import common.PageUtil;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import search.SearchDAO;
+
+public class RecmdController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		RecmdDAO dao1 = new RecmdDAO();
+		SearchDAO dao2 = new SearchDAO();
+		String url = request.getRequestURI();
+
+		if (url.contains("list.do")) {
+			// 페이지 시작 → 목록 가져오기
+			String option = "opt1";
+			List<BookDTO> list = dao1.getList(option);
+			request.setAttribute("list", list);
+			RequestDispatcher rd = request.getRequestDispatcher("/user/book/main.jsp");
+			rd.forward(request, response);
+		} else if (url.contains("change.do")) {
+			// 사용자 탭 선택 → 목록 가져오기
+			System.out.println(request.getParameter("opt"));
+			String option = (request.getParameter("opt") != null) ? request.getParameter("opt") : "opt1";
+			List<BookDTO> list = null;
+			if (option.equals("opt1")) {
+				list = dao1.getList(option);
+			} else {
+				list = dao1.getList(option);
+			}
+			request.setAttribute("list", list);
+			request.setAttribute("opt", option);
+			System.out.println("recmd 컨트롤러: " + option);
+			RequestDispatcher rd = request.getRequestDispatcher("/user/book/recommend.jsp");
+			rd.forward(request, response);
+		} else if (url.contains("search.do")) {
+			// 관리자 → 도서 검색
+			String option = "all";
+			String keyword = request.getParameter("keyword");
+			int count = dao2.resultCount(option, keyword);
+			common.PageUtil page = new PageUtil(count, 1);
+			int start = page.getPageBegin();
+			int end = page.getPageEnd();
+			// 검색 결과 목록 가져오기
+			List<BookDTO> list = dao2.totSearch(keyword, start, end);
+			System.out.println("컨트롤러 search" + list);
+			RequestDispatcher rd = request.getRequestDispatcher("/user/search/popup.jsp");
+			rd.forward(request, response);
+		} else if (url.contains("insert.do")) {
+			// 사서추천탭에 inert
+			int b_id = Integer.parseInt(request.getParameter("b_id"));
+			String a_id = request.getParameter("a_id");
+			Map<String, Object> map = new HashMap<>();
+			map.put("b_id", b_id);
+			map.put("a_id", a_id);
+			dao1.insert(map);
+		} else if (url.contains("delete.do")) {
+			String option = request.getParameter("opt");
+			if (option.equals("all")) {
+				dao1.delete(option);
+			} else {
+				String[] idx = request.getParameterValues("idx");
+				if (idx != null) {
+					for (int i = 0; i < idx.length; i++) {
+						dao1.delete(Integer.parseInt(idx[i]));
+						System.out.println("컨트롤러 delete" + idx[i]);
+					}
+				}
+			}
+			// 기존 데이터 delete
+			RequestDispatcher rd = request.getRequestDispatcher("/user/search/popup.jsp");
+			rd.forward(request, response);
+		}
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
+	}
+
+}

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="myLibrary">
+	<!-- 나의 서재 -->
+	<select id="myLibrary_info" resultType="myLibrary.MyLibraryDTO">
+		SELECT
+			m_no,
+			m_id,
+			m_name,
+			m_tel,
+			m_email,
+			m_img,
+			to_char(m_year, 'yyyy-MM-dd') m_year,
+			l_bookid,
+			(
+				SELECT
+					COUNT(*)
+				FROM
+					sl_member, lo_book
+				WHERE m_no = l_memno
+				AND m_id = #{m_id}
+				AND l_return_yn = 'N'
+			) lo_book_cnt,
+			(
+				SELECT
+					COUNT(*)
+				FROM
+					sl_member, re_book
+				WHERE m_no = r_memno
+				AND m_id = #{m_id}
+			) re_book_cnt,
+						(
+				SELECT
+					COUNT(*)
+				FROM
+					sl_member, lo_book
+				WHERE m_no = l_memno
+				AND m_id = #{m_id}
+			) total_cnt
+		FROM sl_member, lo_book, re_book
+		WHERE m_no = l_memno
+		AND m_no = r_memno
+		AND m_id = #{m_id}
+		AND rownum = 1
+	</select>
+	
+	<select id="myLoanBook" resultType="myLibrary.MyLibraryDTO">
+		SELECT * FROM lo_book WHERE l_memno = #{l_memno}
+	</select>
+	
+	<select id="myHistory" resultType="myLibrary.MyLibraryDTO">
+		SELECT * FROM lo_book
+		WHERE l_memno = #{l_memno}
+		AND l_return_yn = 'N' 
+	</select>
+</mapper>

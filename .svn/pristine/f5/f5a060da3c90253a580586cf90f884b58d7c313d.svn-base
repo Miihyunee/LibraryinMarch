@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="res_book">
+
+<!--예약신청시 데이터 저장 + 예약순번-->
+<insert id="insert_book">
+	insert into re_book (
+	r_num,
+	r_memno,
+    r_bookid,
+    r_reservation) 
+    values (
+    re_book_seq.nextval,
+    (select m_no from sl_member where m_id = #{m_id}),
+    #{r_bookid},
+    ( select nvl(max(r_reservation) + 1,1)
+    from re_book
+    where r_bookid = #{r_bookid}
+    )
+)
+</insert>
+
+<!-- 회원 예약도서 목록 -->
+<select id="myReBook" resultType="admin.l_book.ReBookDTO">
+	select
+	r_memno,
+	b_id,
+	b_name,
+	b_author,
+	b_pub,
+	b_year,
+	b_url,
+	to_char(r_regdate, 'yyyy-mm-dd')r_regdate,
+	r_reservation
+	from
+	sl_book,re_book
+	where	
+	r_memno =  (select M_NO from sl_member
+    where M_ID = #{r_memno}) 
+	 and b_id = r_bookid 
+	order BY r_regdate
+</select>
+	
+<!-- 동일한 도서 중복예약 방지  -->
+<select id="check_rebook" resultType="int">
+select count(*) r_memno
+from re_book  
+where r_bookid=#{r_bookid} 
+</select>
+
+<!-- 도서예약취소 -->
+<delete id="delete_rebook" >
+delete
+from re_book
+where r_bookid=#{r_bookid}
+</delete>
+
+</mapper>

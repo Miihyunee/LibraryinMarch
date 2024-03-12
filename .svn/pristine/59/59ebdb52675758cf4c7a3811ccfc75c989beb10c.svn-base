@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="checkout">
+<!-- 대여중인 권수 -->
+<select id="loCount" resultType="int">
+select count(*) from lo_book
+	where L_RETURN_YN='N' and L_BOOKID=#{b_id}
+	order by L_BOOKID
+</select>
+
+<!-- 대출리스트에 데이터 추가 -->
+<insert id="insertLo">
+insert into lo_book(l_num, l_memno, l_bookid)
+values (lo_book_seq.nextval, #{l_memno}, #{l_bookid})
+</insert>
+
+<!-- 사용자가 현재 대출중인 책 권수 -->
+<select id="cntUserLo">
+select count(L_BOOKID)
+from (select * from lo_book
+      where L_RETURN_YN='N')
+where R_MEMNO=#{R_MEMNO}
+</select>
+</mapper>

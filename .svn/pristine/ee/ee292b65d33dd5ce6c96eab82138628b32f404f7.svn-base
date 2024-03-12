@@ -1,0 +1,95 @@
+package admin.memo;
+
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import admin.login.AdminDAO;
+import admin.memo.MemoDAO;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+public class MemoController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		MemoDAO dao = new MemoDAO();
+		AdminDAO dao1 = new AdminDAO();
+		String url = request.getRequestURL().toString();
+		if(url.indexOf("memo.do") != -1) {
+			String result = "";
+			int me_idx=1;
+			MemoDTO memo = dao.list(me_idx);
+			if (memo == null) {
+				result = "fail";
+				request.setAttribute("result", result);
+				System.out.println(result);
+				RequestDispatcher rd = request.getRequestDispatcher("/admin/admin_main.jsp");
+				rd.forward(request,response);
+			} else {
+				result = "success";
+				request.setAttribute("memo", memo);
+				request.setAttribute("result", result);
+				System.out.println("결과결과"+result);
+				System.out.println("메모리스트"+memo);
+				RequestDispatcher rd = request.getRequestDispatcher("/admin/memo_main.jsp");
+				rd.forward(request,response);
+			}
+		} else if (url.indexOf("insert.do") != -1) {
+			String me_a_id = request.getParameter("me_a_id");
+			String me_memo = request.getParameter("me_memo");
+			MemoDTO dto = new MemoDTO();
+			dto.setMe_a_id(me_a_id);
+			dto.setMe_memo(me_memo);
+			System.out.println(dto);
+			dao.insert(dto);
+			MemoDTO memo = dao.list(1);
+//			request.setAttribute("memo", memo);
+//			RequestDispatcher rd = request.getRequestDispatcher("/admin/admin_main.jsp");
+//			rd.forward(request, response);
+		} else if(url.indexOf("delete.do") != -1) {
+			int me_idx = 1;
+			dao.delete(me_idx);
+			MemoDTO memo = dao.list(1);
+			String result="";
+			if (memo == null) {
+				result = "fail";
+				request.setAttribute("result", result);
+				System.out.println(result);
+//				RequestDispatcher rd = request.getRequestDispatcher("/admin/admin_main.jsp");
+//				rd.forward(request,response);
+			} else {
+				result = "success";
+				request.setAttribute("memo", memo);
+				request.setAttribute("result", result);
+				System.out.println(result);
+//				RequestDispatcher rd = request.getRequestDispatcher("/admin/admin_main.jsp");
+//				rd.forward(request,response);
+			}		
+		} else if(url.indexOf("update.do") != -1) {
+			MemoDTO memo = new MemoDTO();
+			String me_a_id = request.getParameter("me_a_id");
+			String me_memo = request.getParameter("me_memo");
+			int me_idx = 1;
+			memo.setMe_idx(me_idx);
+			memo.setMe_a_id(me_a_id);
+			memo.setMe_memo(me_memo);
+			dao.update(memo);
+			MemoDTO memo1 = dao.list(1);
+//			request.setAttribute("memo", memo1);
+//			RequestDispatcher rd = request.getRequestDispatcher("/admin/admin_main.jsp");
+//			rd.forward(request, response);
+		}
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
+	}
+
+}

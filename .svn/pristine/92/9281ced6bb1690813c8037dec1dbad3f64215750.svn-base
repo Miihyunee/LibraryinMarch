@@ -1,0 +1,278 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
+<%@ include file="../common/header.jsp"%>
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="http://code.jquery.com/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet" href="../include/css/bootstrap.css"> 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+<script src="../include/js/bootstrap.js"></script>
+<script>
+
+/* location.href="/syLibrary/search_servlet/list.do"; */
+
+$(function() {
+	$("#btnSearch").click(function () {
+		list();
+	});
+	
+	$("#btnShow").click(function() {
+		$(".searchForm").show();
+		$("#btnShow").hide();
+		$("#btnHide").show();
+	});
+	$("#btnHide").click(function() {
+		$(".searchForm").hide();
+		$("#btnShow").show();
+		$("#btnHide").hide();
+	});
+});
+
+function collapse(element) {
+	var content = element.nextElementSibling;
+	element.classList.toggle("active");         // 활성화 여부 toggle
+	
+	if (content.style.maxHeight != 0) {         // 버튼 다음 요소가 펼쳐져 있으면
+		content.style.maxHeight = null;         // 접기
+	} else {
+		content.style.maxHeight = content.scrollHeight + "px";  // 접혀있는 경우 펼치기
+	}
+}
+
+function list() {
+	let param="keyword="+$("#keyword").val();
+	
+	$.ajax({
+		url:"/syLibrary/search_servlet/list.do",
+		data:param,
+		success:function(txt){
+			console.log("txt: "+txt);
+			$("#result").html(txt);
+		}
+	});
+}
+
+</script>
+
+
+<style>
+html, body {
+	margin-left: 10%;
+	margin-right: 10%; 
+}
+
+.menu {
+	margin-right: 3rem;
+	margin-bottom: 1rem;
+}
+
+#wrap {
+	height:100%;
+	position: relative;
+}
+
+#sidebar {
+	float: left;
+	margin: auto;
+	padding-right: 1rem;
+	min-width: 20%;
+} 
+
+#contents{
+	width: 80%;
+	min-width: 400px;
+	float: right;
+}
+
+#footer {
+	clear: both;
+}
+
+#wrap .collapsible {
+	background-color: #d8bfd8;
+	color: #343a40;
+	cursor: pointer;
+	padding: 18px;
+	width: 100%;
+	border: none;
+	text-align: left;
+	outline: none;
+	font-size: 15px;
+}
+
+#wrap .content {
+	padding: 0 18px;
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height 0.2s ease-out;
+	background-color: #f1f1f1;
+}
+
+#sidebar .collapsible:after {
+	content: '\002B';
+	color: white;
+	font-weight: bold;
+	float: right;
+	margin-left: 5px;
+}
+
+#sidebar .active:after {
+	content: "\2212";
+}
+
+.toggleBtn {
+	margin: auto;
+	display: block;
+	border: none;
+}
+
+
+</style>
+
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+<!-- 상단메뉴 -->
+<div id="menubar">
+<nav class="navbar navbar-expand-md bg-body-tertiary" aria-label="menu">
+	<div class="container-fluid">
+		<span class="menu">
+			<a class="nav-link active" href="/syLibrary/main/search.jsp">자료찾기</a>
+		</span>
+		<span class="menu">
+			<a class="nav-link" href="#">나의서재</a>
+		</span>
+		<span class="menu me-auto">
+			<a class="nav-link" href="#">이용안내</a>
+		</span>
+	</div>
+</nav>
+</div>
+
+<div class="menuTitle" style="margin-top:0.5em; margin-bottom:0.5em;">
+	<h3>자료찾기</h3>
+	<div class="navi">
+	<span>HOME</span> <i class="bi bi-chevron-right"></i>
+	<span>자료찾기</span> <i class="bi bi-chevron-right"></i> 
+	<span>소장자료검색</span>
+	</div>
+	<hr>
+</div>
+
+
+
+
+<!-- 사이드메뉴 -->
+<div id="wrap">
+<div id="sidebar">
+<ul class="list-unstyled ps-0">
+	<li class="mb-1">
+		<button class="collapsible" onclick="collapse(this)">
+			소장자료검색
+		</button>
+		<div class="content" id="internal">
+			<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+				<li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">제목</a></li>
+				<li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">저자</a></li>
+				<li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">발행처</a></li>
+			</ul>
+		</div>
+	</li>
+	<br>
+	<li class="mb-1">
+		<button class="collapsible" onclick="collapse(this)" >
+			외부자료검색
+		</button>
+		<div class="content" id="external">
+			<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+				<li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">제목</a></li>
+				<li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">저자</a></li>
+				<li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">발행처</a></li>
+			</ul>
+		</div>
+	</li>
+</ul>
+</div>
+
+
+
+
+
+<!-- 메인컨텐츠 -->
+<div id="contents">
+
+<!-- 검색창 -->
+<div class="card text-center">
+	<div class="card-header">
+		<ul class="nav nav-tabs card-header-tabs">
+			<li class="nav-item">
+			  <a class="nav-link active" aria-current="true" name="type2" href="#">소장자료검색</a>
+			</li>
+			<li class="nav-item">
+			  <a class="nav-link" aria-current="false" name="type3" href="#">외부자료검색</a>
+			</li>
+		</ul>
+	</div>
+	<div class="card-body">
+		<div class="d-flex justify-content-center">
+			<div class="input-group mb-3">
+	  			<input id="keyword" value="${keyword}" type="text" class="form-control" placeholder="검색어를 입력하세요" aria-label="검색어를 입력하세요">
+	  			<button class="btn btn-outline-secondary" type="button" id="btnSearch">
+					<img src="../resources/images/search.png" width="80%">
+				</button>
+			</div>
+		</div>
+
+		<!-- 상세검색창 -->
+		<div class="searchForm" style="display: none; padding: 0 3rem 1rem 3rem">
+		<form name="form1" method="post" action="/syLibrary/board_servlet/detail_search.do" >
+			<div class="input-group mb-3">
+				<div class="input-group-text">
+					<input class="form-check-input mt-0" type="checkbox" name="제목" value="제목">&nbsp;&nbsp;제목&nbsp;&nbsp;&nbsp;&nbsp;
+				</div>
+				<input type="text" class="form-control" aria-label="Text input with checkbox">
+			</div>
+			<div class="input-group mb-3">
+				<div class="input-group-text">
+					<input class="form-check-input mt-0" type="checkbox" name="저자" value="저자">&nbsp;&nbsp;저자&nbsp;&nbsp;&nbsp;&nbsp;
+				</div>
+				<input type="text" class="form-control" aria-label="Text input with checkbox">
+			</div>
+			<div class="input-group mb-3">
+				<div class="input-group-text">
+					<input class="form-check-input mt-0" type="checkbox" name="발행처" value="발행처">&nbsp;&nbsp;발행처&nbsp;
+				</div>
+				<input type="text" class="form-control" aria-label="Text input with checkbox">
+			</div>
+	
+			<div class="d-flex justify-content-end" >
+				<button type="reset" class="btn btn-outline-secondary" id="btnReset" onclick>입력초기화</button>
+				&nbsp;
+				<button type="submit" class="btn btn-outline-secondary" id="btnDetail">&nbsp;&nbsp;상세검색&nbsp;&nbsp;</button>
+			</div>
+		</form>
+		</div>
+
+		<button class="toggleBtn" type="button" id="btnShow"><i class="bi bi-chevron-double-down"></i></button>
+		<button class="toggleBtn" type="button" id="btnHide" style="display: none;"><i class="bi bi-chevron-double-up"></i></button>
+	</div>
+</div>
+<br>
+<div id="result">
+<%@ include file="./search_result.jsp"%>
+</div>
+</div>
+
+
+<!-- footer -->
+<div class="container" id="footer">
+<%@ include file="../common/footer.jsp"%>
+</div>
+
+
+</body>
+</html>

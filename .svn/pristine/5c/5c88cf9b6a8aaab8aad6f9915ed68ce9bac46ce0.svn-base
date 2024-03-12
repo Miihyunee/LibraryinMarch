@@ -1,0 +1,65 @@
+package admin.memo;
+
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import admin.login.AdminDAO;
+import admin.memo.MemoDAO;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+public class MemoController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		MemoDAO dao = new MemoDAO();
+		AdminDAO dao1 = new AdminDAO();
+		String url = request.getRequestURL().toString();
+		if(url.indexOf("memo.do") != -1) {
+			int me_idx=1;
+			MemoDTO memo = dao.list(me_idx);
+			request.setAttribute("memo",memo);
+			System.out.println("값===="+memo);
+			String page = "/admin/main/memo.jsp";
+			RequestDispatcher rd = request.getRequestDispatcher(page);
+			rd.forward(request,response);
+		} else if (url.indexOf("insert.do") != -1) {
+			String me_a_id = request.getParameter("me_a_id");
+			String me_memo = request.getParameter("me_memo");
+			Map<String,Object> map = new HashMap<>();
+			map.put("me_a_id",me_a_id);
+			map.put("me_memo",me_memo);
+			dao.insert(map);
+		} else if(url.indexOf("delete.do") != -1) {
+			int me_idx = 1;
+			dao.delete(me_idx);
+			response.sendRedirect(request.getContextPath()+"/admin/main/memo.jsp");
+		} else if(url.indexOf("update.do") != -1) {
+			MemoDTO memo = new MemoDTO();
+			String me_a_id = request.getParameter("me_a_id");
+			String me_memo = request.getParameter("me_memo");
+			int me_idx = 1;
+			/* Map<String,Object> map = new HashMap<>(); */
+			memo.setMe_idx(me_idx);
+			memo.setMe_a_id(me_a_id);
+			memo.setMe_memo(me_memo);
+			dao.update(memo);
+			request.setAttribute("memo", memo);
+			RequestDispatcher rd = request.getRequestDispatcher("/admin/admin_main.jsp");
+			rd.forward(request, response);
+		}
+	
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
+	}
+
+}

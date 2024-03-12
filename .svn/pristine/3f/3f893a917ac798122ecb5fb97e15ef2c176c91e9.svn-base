@@ -1,0 +1,67 @@
+package review;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+
+import sqlmap.MybatisManager;
+
+public class ReviewDAO {
+	public List<ReviewDTO> list(int b_id) {
+		SqlSession session = null;
+		List<ReviewDTO> reviews = null;
+		try {
+			session = MybatisManager.getInstance().openSession();
+			reviews = session.selectList("review.select", b_id);
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("reviews", reviews);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return reviews;
+	}
+
+	public void insert(ReviewDTO dto) {
+		SqlSession session = null;
+		try {
+			session = MybatisManager.getInstance().openSession();
+			Map<String, Object> map = new HashMap<>();
+			String contents = dto.getContents();
+			contents = contents.replace("<", "&lt;");
+			contents = contents.replace(">", "&gt;");
+			contents = contents.replace("  ", "&nbsp;&nbsp;");
+			map.put("contents", contents);
+			map.put("m_id", dto.getM_id());
+			map.put("b_id", dto.getB_id());
+			session.insert("memo.review_insert", map);
+			session.commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null)
+				session.close();
+		}
+	}
+
+	public void delete(int idx) {
+		SqlSession session = null;
+		try {
+			session = MybatisManager.getInstance().openSession();
+			session.delete("review.delete", idx);
+			session.commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null)
+				session.close();
+		}
+	}
+}

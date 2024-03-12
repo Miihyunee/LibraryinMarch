@@ -1,0 +1,187 @@
+package search;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+
+import admin.book.BookDTO;
+import checkout.CheckoutDAO;
+import sqlmap.MybatisManager;
+
+public class SearchDAO {
+
+	// 키워드로 통합검색(도서명, 작가, 출판사)
+	public List<BookDTO> totSearch(String keyword, int start, int end) {
+		SqlSession session = null;
+		List<BookDTO> list = null;
+
+		try {
+			session = MybatisManager.getInstance().openSession();
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("keyword", keyword);
+			map.put("start", start);
+			map.put("end", end);
+			list = session.selectList("search.totSearch", map);
+
+			for (BookDTO dto : list) {
+				String b_name = dto.getB_name();
+				String b_author = dto.getB_author();
+				String b_pub = dto.getB_pub();
+				// 키워드 강조(폰트 컬러)
+				b_name = b_name.replace(keyword, "<span style='color:crimson'>" + keyword + "</span>");
+				b_author = b_author.replace(keyword, "<span style='color:crimson'>" + keyword + "</span>");
+				b_pub = b_pub.replace(keyword, "<span style='color:crimson'>" + keyword + "</span>");
+				dto.setB_name(b_name);
+				dto.setB_author(b_author);
+				dto.setB_pub(b_pub);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return list;
+	}
+
+	// 상세검색(도서명, 작가, 출판사)
+	public List<BookDTO> detailSearch(String b_name, String b_author, String b_pub, int start, int end) {
+		SqlSession session = null;
+		List<BookDTO> list = null;
+
+		try {
+			session = MybatisManager.getInstance().openSession();
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("b_name", b_name);
+			map.put("b_author", b_author);
+			map.put("b_pub", b_pub);
+			map.put("start", start);
+			map.put("end", end);
+			list = session.selectList("search.detailSearch", map);
+
+//			for (BookDTO dto : list) {
+//				String b_name = dto.getB_name();
+//				String b_author = dto.getB_author();
+//				String b_pub = dto.getB_pub();
+//				// 키워드 강조(폰트 컬러)
+//				b_name = b_name.replace(b_name, "<span style='color:crimson'>" + b_name + "</span>");
+//				b_author = b_author.replace(b_author, "<span style='color:crimson'>" + b_author + "</span>");
+//				b_pub = b_pub.replace(b_pub, "<span style='color:crimson'>" + b_pub + "</span>");
+//				dto.setB_name(b_name);
+//				dto.setB_author(b_author);
+//				dto.setB_pub(b_pub);
+//			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return list;
+	}
+
+	// 레코드 개수 계산(페이지 나누기)
+	public int count() {
+		int result = 0;
+		SqlSession session = null;
+
+		try {
+			session = MybatisManager.getInstance().openSession();
+			result = session.selectOne("search.recCount");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return result;
+	}
+
+	// resultCount함수 오버로딩 : 검색 결과 레코드 수 계산
+	public int resultCount(String option, String keyword) {
+		int result = 0;
+		SqlSession session = null;
+
+		try {
+			session = MybatisManager.getInstance().openSession();
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("option", option);
+			map.put("keyword", keyword);
+			result = session.selectOne("search.resultCount", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return result;
+	}
+
+	public int resultCount(String option, String b_name, String b_author, String b_pub) {
+		int result = 0;
+		SqlSession session = null;
+
+		try {
+			session = MybatisManager.getInstance().openSession();
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("option", option);
+			map.put("b_name", b_name);
+			map.put("b_author", b_author);
+			map.put("b_pub", b_pub);
+			result = session.selectOne("search.resultCount", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return result;
+	}
+
+	// 페이지 별 도서목록(페이지나누기)
+	public List<BookDTO> pageList(int pageStart, int pageEnd) {
+		List<BookDTO> list = null;
+		SqlSession session = null;
+
+		try {
+			session = MybatisManager.getInstance().openSession();
+			Map<String, Object> map = new HashMap<>();
+			map.put("start", pageStart);
+			map.put("end", pageEnd);
+			list = session.selectList("search.pageList", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return list;
+	}
+
+	// 도서상세페이지(도서정보 + 소장정보)
+	public Map<String,Object> showBookInfo(int b_id) {
+		SqlSession session = null;
+		Map<String, Object> map = null;
+		BookDTO dto = null;
+		boolean state; // true: 대출가능(비치중) ⬌ false: 대출불가(전권 대여중)
+		checkout.CheckoutDAO dao = new CheckoutDAO();
+
+		try {
+			session = MybatisManager.getInstance().openSession();
+			dto = session.selectOne("book.edit", b_id);
+			map.put("dto", dto);
+			state = dao.checkBookState(b_id);
+			map.put("state", state);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		return map;
+	}
+
+}

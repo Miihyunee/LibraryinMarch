@@ -1,0 +1,178 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+   <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="http://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+/* function detail(m_no) {
+	location.href = "/syLibrary/admember_servlet/ad_list_detail.do?m_no=" + m_no;
+} */
+/* $(function() {
+	$("#btndetail").click(function() {
+		document.form1.action="/syLibrary/admember_servlet/ad_list_detail.do?m_no=" + m_no;
+	});
+}); */
+/* $(function() {
+	$("#btndetail").click(function() {
+		let m_no=$("#m_no").val();
+		$.ajax({
+			type :"post",
+			url :"member_detail.jsp",
+			data : ("m_no":m_no),
+			success : function(txt){
+				$("#result").html(txt);
+			}
+		});
+	});
+}); */
+$(function() {
+	$("#btnSearch").click(function() {
+		if ($("#search").val() == "") {
+			alert("검색어를 입력하세요");
+			return;
+		}
+	});
+	$("#btnAll").click(function() {
+		location.href="/syLibrary/admember_servlet/list.do?cur_page="+page;
+	});
+});
+function slist(m_no){
+	location.href="/syLibrary/admember_servlet/ad_list_detail.do?m_no=" + m_no;
+}
+function mlist(m_no){
+	location.href="/syLibrary/loanBook_servlet/lo_memlist.do?m_no=" + m_no;
+}
+
+
+function list(page){
+	location.href="/syLibrary/admember_servlet/list.do?cur_page="+page+"&search_option=${search_option}&search=${search}";
+}
+</script>
+</head>
+<body>
+<%@ include file="../admin_header.jsp" %>
+<%@ include file="../menu.jsp" %>
+<h2>회원정보</h2>
+<form name="form1" method="post" action="/syLibrary/admember_servlet/search.do">
+<select id="search_option">
+	<c:choose>
+<%-- 		<c:when test="${search_option==null||search_option=='all'}">
+			<option value="all" selected>전체검색</option>
+			<option value="m_name">이름</option>
+			<option value="m_birth_date">생년월일</option>
+			<option value="m_id">아이디</option>
+			<option value="m_tel">전화번호</option>
+			<option value="m_year">가입일</option>
+		</c:when> --%>
+		<c:when test="${search_option==null||search_option=='m_name'}">
+			<option value="m_name" selected>이름</option>
+			<option value="m_birth_date">생년월일</option>
+			<option value="m_id">아이디</option>
+			<option value="m_tel">전화번호</option>
+			<option value="m_year">가입일</option>
+		</c:when>
+		<c:when test="${search_option=='m_birth_date'}">
+			<option value="m_name">이름</option>
+			<option value="m_birth_date" selected>생년월일</option>
+			<option value="m_id">아이디</option>
+			<option value="m_tel">전화번호</option>
+			<option value="m_year">가입일</option>
+		</c:when>
+		<c:when test="${search_option=='m_id'}">
+			<option value="m_name">이름</option>
+			<option value="m_birth_date">생년월일</option>
+			<option value="m_id" selected>아이디</option>
+			<option value="m_tel">전화번호</option>
+			<option value="m_year">가입일</option>
+		</c:when>
+		<c:when test="${search_option=='m_tel'}">
+			<option value="m_name">이름</option>
+			<option value="m_birth_date">생년월일</option>
+			<option value="m_id">아이디</option>
+			<option value="m_tel" selected>전화번호</option>
+			<option value="m_year">가입일</option>
+		</c:when>
+		<c:when test="${search_option=='m_year'}">
+			<option value="m_name">이름</option>
+			<option value="m_birth_date">생년월일</option>
+			<option value="m_id">아이디</option>
+			<option value="m_tel">전화번호</option>
+			<option value="m_year" selected>가입일</option>
+		</c:when>
+	</c:choose>
+</select>
+<div class="col-sm-4">
+<%-- <input id="search" class="form-control" value="${search}"> --%>
+<input id="search" name="search" value="${search}">
+<input type="submit" id="btnSearch" value="조회" class="btn btn-info">
+<input type="button" id="btnALl" value="전체목록" class="btn btn-info">
+</div>
+</form>
+
+<%-- 	<c:when test="${list.size() > 0}"> --%>
+	<!-- <form method="post" name="form1"> -->
+		<table border="1" width="900px">
+		 <tr align="center">
+		 	<th>이름</th>
+		 	<th>생년월일</th>
+		 	<th>아이디</th>
+		 	<th>전화번호</th>
+		 	<th>가입일</th>
+		 	<th>&nbsp;</th>
+		 </tr>
+		 <c:forEach var="row" items="${list}">
+		    <tr align="center">
+			  	<td>${row.m_name}</td>
+				<td>${row.m_birth_date}</td>
+			   	<td>${row.m_id}</td>
+			   	<td>${row.m_tel}</td>
+				<td>${row.m_year}</td>
+				<%-- <td><input type="button" id="btndetail" value="${row.m_no}">상세</td> --%>
+ 				<td>
+					<input type="button" value="상세" class="btn btn-success" onclick="slist(${row.m_no}); mlist(${row.m_no});">
+					
+					
+					<%-- <input type="hidden" value="${row.m_no}">
+					<input type="button" value="상세" class="btn btn-success" onclick="detail()"> --%>
+<%-- <td>${row.m_no}<input type="button" id="btndetail" value="상세" class="btn btn-success" onclick="detail()"></td> --%>
+				<!-- <td><input type="button" id="btndetail" value="상세" class="btn btn-success" onclick="detail()"></td> -->
+				</td>
+			</tr>
+		  </c:forEach>
+		  
+	<tr align="center">
+		<td colspan="7">
+			<c:if test="${page.curPage > 1}">
+		
+				<a href="#" onclick="list('1')">[처음]</a>
+			</c:if>
+			<c:if test="${page.curBlock > 1}">
+				<a href="#" onclick="list('${page.prevPage}')">[이전]</a>
+			</c:if>
+			<c:forEach var="num" begin="${page.blockStart}" end="${page.blockEnd}">
+				<c:choose>
+					<c:when test="${num == page.curPage}">
+						<span style="color:red">${num}</span>
+					</c:when>
+					<c:otherwise>
+						<a href="#" onclick="list('${num}')">${num}</a>
+					</c:otherwise>
+				</c:choose>
+			</c:forEach>
+			<c:if test="${page.curBlock < page.totBlock}">
+				<a href="#" onclick="list('${page.nextPage}')">[다음]</a>
+			</c:if>
+			<c:if test="${page.curPage < page.totPage}">
+				<a href="#" onclick="list('${page.totPage}')">[마지막]</a>
+			</c:if>
+		</td>
+	</tr>
+</table>
+	<!-- </form> -->
+<%-- 	</c:when> --%>
+</body>
+</html>

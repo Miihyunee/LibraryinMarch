@@ -1,0 +1,82 @@
+@charset "UTF-8";
+.btn.text-white.pink {
+	font-size: 1.0em;
+	letter-spacing: 8px; width : 200px;
+	background-color: lightpink;
+	width: 200px;
+	font-weight: bold
+}
+
+.btnLoginBottom>a {
+	text-decoration-line: none;
+	color: black;
+}
+
+ul.tabs {
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+}
+
+ul.tabs li {
+	background: none;
+	color: #222;
+	display: inline-block;
+	padding: 10px 15px;
+	cursor: pointer;
+}
+
+ul.tabs li.current {
+	background: #ededed;
+	color: #222;
+}
+
+.tab-content {
+	display: none;
+	padding: 15px 0;
+	border-top: 3px solid #eee;
+}
+
+.tab-content.current {
+	display: inherit;
+}
+
+div.col.detail {
+	display: flex;
+	flex-flow: column wrap;
+}
+
+div.col.detail>p {
+	align-content: space-evenly;
+}
+
+div.col.detail>p>a {
+	text-decoration: none;
+	color: inherit;
+	font-size: 1.3em;
+}
+
+div.col.detail>p>a:hover {
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+div.col.detail>p>span::before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 50%;
+	width: 1px;
+	left: -1px;
+	height: 14px;
+	margin-top: -7px;
+	background-color: #c2c2c2;
+}
+
+div.col.detail>p>span {
+	float: left;
+	position: relative;
+	margin-right: 25px;
+	margin-left: -13px;
+	padding-left: 13px;
+}

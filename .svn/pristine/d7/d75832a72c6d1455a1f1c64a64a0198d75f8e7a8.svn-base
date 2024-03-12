@@ -1,0 +1,41 @@
+package book;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+
+import sqlmap.MybatisManager;
+
+public class BookDAO {
+	public List<BookDTO> list_search(String search_option, String keyword) {
+		List<BookDTO> list = null;
+		SqlSession session=null;
+		try {
+			session = MybatisManager.getInstance().openSession();
+			Map<String,Object> map=new HashMap<>();
+			map.put("search_option", search_option);
+			map.put("keyword", keyword);
+			list = session.selectList("book.list_search",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(session!=null) session.close();
+		}
+		return list;
+	}
+	
+	public List<BookDTO> select_cg() {
+		SqlSession session = MybatisManager.getInstance().openSession();
+		List<BookDTO> list = null;
+		try {
+			list = session.selectList("book.select_cg");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(session!=null) session.close();
+		}
+		return list;
+	}
+}

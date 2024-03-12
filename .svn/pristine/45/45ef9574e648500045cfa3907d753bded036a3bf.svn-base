@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="res_book">
+
+<!--예약도서 조회 + 예약순번-->
+<insert id="insert_book">
+	insert into re_book (
+	r_num,
+	r_memno,
+    r_bookid,
+    r_reservation) 
+    values (
+    re_book_seq.nextval,
+    (select m_no from sl_member where m_id = #{m_id}),
+    #{r_bookid},
+    ( select max(r_reservation) + 1
+    from re_book
+    where r_bookid = #{r_bookid}
+    )
+)
+</insert>
+
+<!--대출도서 조회( y/n )  y이면 예약순번 변경-->
+
+
+
+</mapper>

@@ -1,0 +1,66 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="http://code.jquery.com/jquery-3.6.1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<script>
+
+$(document).ready(function(){
+	getGraph();
+});
+
+
+function getGraph() {
+	let dateList = [];
+	let bookList=[];
+	$.ajax({
+		url: "/syLibrary/admin_servlet/chart.do",
+		type: "get",
+		dataType:"json",
+		ContentType: "text/html;charset=utf-8",
+		success: function(data){
+			console.log(data);
+			for (let i=0; i<7; i++) {
+				dateList.push(data[i].L_LODATE);
+				bookList.push(data[i].LOAN_BOOK);
+				console.log(dateList);
+				console.log(bookList);
+			}
+			const chartEl = document.getElementById('chart-container').getContext('2d');
+		    const barChart = new Chart(chartEl, {
+		        type: 'bar',
+		        data: {
+		            labels: dateList,
+		            datasets: [{
+		                label: '주간 도서 대출량',
+		                borderWidth: 3,
+		                data: bookList
+		            }]
+		        },
+		        options: {
+		        	responsive: false
+		        }
+		    });
+		}
+	});
+}
+</script>
+<body>
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-md-12">
+                <canvas id="chart-container" width="500px" height="400px" style="float: left"></canvas>   
+            </div>
+        </div>
+    </div>
+    <script>
+    
+    </script>
+</body>
+</html>

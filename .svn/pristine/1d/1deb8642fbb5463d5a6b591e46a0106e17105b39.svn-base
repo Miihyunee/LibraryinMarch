@@ -1,0 +1,184 @@
+@charset "UTF-8";
+
+body {
+	background: #fbf7f5 !important;
+}
+
+.card-style {
+	background: #fff;
+	box-sizing: border-box;
+	padding: 25px 30px;
+	position: relative;
+	box-shadow: 0px 12px 24px -4px rgba(145, 158, 171, 0.12), 0px 0px 2px
+		0px rgba(145, 158, 171, 0.2);
+	border-radius: 7px;
+}
+
+.btn.text-white.pink {
+	font-size: 1.0em;
+	letter-spacing: 4px;
+	width: 200;
+	height: 50px;
+	background-color: lightpink;
+	font-weight: bold
+}
+
+.btnLoginBottom>a {
+	text-decoration-line: none;
+	color: black;
+}
+
+ul.tabs {
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+}
+
+ul.tabs li {
+	background: none;
+	color: #222;
+	display: inline-block;
+	padding: 10px 15px;
+	cursor: pointer;
+}
+
+ul.tabs li.current {
+	background: #ededed;
+	color: #222;
+}
+
+.tab-content {
+	display: none;
+	padding: 15px 0;
+	border-top: 3px solid #eee;
+}
+
+.tab-content.current {
+	display: inherit;
+}
+
+.edit-box {
+	border: 1px solid #D5D5D5;
+	height: 900px;
+	padding-top: 3em;
+}
+
+div.col.detail {
+	display: flex;
+	flex-flow: column wrap;
+	align-self: center
+}
+
+div.col.detail>p {
+	align-content: space-evenly;
+}
+
+div.col.detail>p>a {
+	text-decoration: none;
+	color: inherit;
+	font-size: 1.3em;
+}
+
+div.col.detail>p>a:hover {
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+div.col.detail>p>span::before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 50%;
+	width: 1px;
+	left: -1px;
+	height: 14px;
+	margin-top: -7px;
+	background-color: #c2c2c2;
+}
+
+div.col.detail>p>span {
+	float: left;
+	position: relative;
+	margin-right: 25px;
+	margin-left: -13px;
+	padding-left: 13px;
+}
+
+/* ========== 도서관 오는 길 ============= */
+.top{padding-bottom:30px;}
+.top h4{position:relative; font-size:16px; color:#c8cacc; letter-spacing:0em; font-weight:500; margin:0; line-height:1.6; padding-left:25px;}
+.top h4:before{content:''; position:absolute; display:block; width:5px; height:83%; background:#04264c; top:4px; left:0;}
+.top h4 b{font-size:34px; color:#222222; letter-spacing:-0.045em; font-weight:500;}
+.top p{font-size:16px; color:#888888; letter-spacing:-0.045em; font-weight:300; line-height:1.6; margin-top:20px;}
+.top p span{letter-spacing:0em; font-weight:400;}
+.bot{padding-top:30px; border-top:1px solid #efefef;}
+.bot ul + h5{margin-top:30px;}
+.bot h5{font-size:20px; color:#444444; letter-spacing:-0.045em; font-weight:500; margin:0; margin-bottom:10px;}
+.bot h5 img{display:inline-block; vertical-align:middle; margin-right:10px;}
+.bot ul li{margin:5px 0; font-size:0; letter-spacing:-4px;}
+.bot ul li h6{position:relative; display:inline-block; vertical-align:top; font-size:16px; color:#666666; letter-spacing:-0.045em; font-weight:300; margin:0; padding-right:10px; box-sizing:border-box;}
+.bot ul li h6:before{content:''; position:absolute; display:block; width:1px; height:20px; background:#efefef; top:4px; right:0;}
+.bot ul li h6 span{display:inline-block;vertical-align:middle;color:#fff;padding:0 8px;border-radius:2px;margin-right:2px;}
+.bot ul li h6 span.col01{background:#009944;}
+.bot ul li h6 span.col02{background:#009899;}
+.bot ul li p{display:inline-block; vertical-align:top; font-size:16px; color:#888888; letter-spacing:-0.045em; font-weight:300; line-height:1.4; padding-left:10px; box-sizing:border-box;}
+.bot ul li.w85 p{width:calc(100% - 85px);}
+.bot ul li.w125 p{width:calc(100% - 125px);}
+
+@media all and (max-width:1200px){
+	dl{display:block; height:auto;}
+	dl dt{display:block; width:100%; height:400px;}
+	dl dd{display:block; width:100%; padding:40px;}
+}
+
+
+/* ========== Buttons css ========== */
+.main-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	padding: 15px 45px;
+	font-weight: 500;
+	font-size: 14px;
+	line-height: 24px;
+	border-radius: 3px;
+	cursor: pointer;
+	z-index: 5;
+	transition: all 0.4s ease-in-out;
+	border: 1px solid transparent;
+	overflow: hidden;
+}
+
+.main-btn i {
+	font-size: 17px;
+}
+
+.main-btn svg {
+	fill: currentColor;
+}
+
+.main-btn:hover {
+	color: inherit;
+}
+
+.active-btn-light {
+	background: rgba(213, 1, 0, 0.12);
+	color: #000;
+}
+
+.rounded-full {
+	border-radius: 30px;
+}
+
+.btn-hover {
+	position: relative;
+	overflow: hidden;
+}

@@ -1,0 +1,150 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<!DOCTYPE html>
+<html>
+<jsp:include page="../common/header.jsp"></jsp:include>
+<head>
+<meta charset="UTF-8">
+<script src="http://code.jquery.com/jquery-3.7.1.js"></script>
+<link type="text/css" href="/syLibrary/include/template2.css"
+	rel="stylesheet">
+<script>
+	function renewDate(l_memno, l_bookid) {
+		if(confirm('선택하신 도서를 연장하시겠습니까?')){
+			location.href = '/syLibrary/myLibrary_servlet/renew.do?mNo=' + l_memno + '&bId=' + l_bookid;
+		}
+	}
+	
+	function list(page) {
+		location.href = "/syLibrary/record_servlet/search.do?cur_page=" + page
+				+ "&search_option=${search_option}&keyword=${keyword}";
+	}
+</script>
+<style>
+div.col.detail {
+	display: flex;
+	flex-flow: column wrap;
+}
+
+div.col.detail>p {
+	align-content: space-evenly;
+}
+
+div.col.detail>p>a {
+	text-decoration: none;
+	color: inherit;
+	font-size: 1.3em;
+}
+
+div.col.detail>p>a:hover {
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+div.col.detail>p>span::before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 50%;
+	width: 1px;
+	left: -1px;
+	height: 14px;
+	margin-top: -7px;
+	background-color: #c2c2c2;
+}
+
+div.col.detail>p>span {
+	float: left;
+	position: relative;
+	margin-right: 25px;
+	margin-left: -13px;
+	padding-left: 13px;
+}
+</style>
+</head>
+<body>
+	<div class="container-fluid" id="menubar">
+		<ul class="nav nav-underline" id="title">
+			<li class="nav-item"><a class="nav-link" aria-current="page"
+				href="/syLibrary/user/search/search.jsp">&nbsp;&nbsp;&nbsp;자료찾기&nbsp;&nbsp;&nbsp;</a>
+			</li>
+			<li class="nav-item"><a class="nav-link active"
+				href="/syLibrary/user/book/myLibrary.jsp">&nbsp;&nbsp;&nbsp;나의서재&nbsp;&nbsp;&nbsp;</a>
+			</li>
+			<li class="nav-item"><a class="nav-link"
+				href="/syLibrary/user/common/guide.jsp">&nbsp;&nbsp;&nbsp;이용안내&nbsp;&nbsp;&nbsp;</a>
+			</li>
+		</ul>
+	</div>
+	<div class="container"
+		style="float: none; margin: 0 auto; margin-top: 3em">
+		<h5>대출 현황건수 : ${myLoanBook[0].lo_book_cnt} 건</h5>
+		<hr>
+		<ul>
+			<c:forEach var="myList" items="${myLoanBook}">
+				<li style="list-style: none;">
+					<div class="row mb-4">
+						<div class="col col-md-auto">
+							<img src="${myList.b_url}" style="width: 150px; height: 200px;">
+						</div>
+						<div class="col detail">
+							<p>
+								<a
+									href="/syLibrary/search_servlet/bookInfo.do?b_id=${myList.l_bookid}">${myList.b_name}</a>
+							</p>
+							<p>
+								<span>작가 : ${myList.b_author} </span> <span>출판사 :
+									${myList.b_pub} </span> <span>발행연도 : ${myList.b_year}</span>
+							</p>
+							<p>
+								<span>도서분류 : ${myList.b_category} </span> <span>ISBN :
+									${myList.b_isbn} </span>
+							</p>
+							<p>
+								<c:set var="now" value="<%=new java.util.Date()%>" />
+								<fmt:formatDate value="${now}" pattern="yyyy-MM-dd" var="today" />
+								<span>대출일 : ${myList.l_lodate}</span>
+								<c:if test="${myList.l_retdate gt today}">
+									<span style="color: black;"> 반납예정일 : ${myList.l_retdate}
+									</span>
+								</c:if>
+								<c:if test="${myList.l_retdate le today}">
+									<span style="color: red;"> 반납예정일 : ${myList.l_retdate} (연체중)</span>
+								</c:if>
+							</p>
+							<p>
+								<input type="button" value="연장신청" class="btn text-white"
+									onclick="renewDate(${myList.l_memno}, ${myList.l_bookid})"
+									style="width: 200px; background-color: lightpink;">
+							</p>
+						</div>
+					</div>
+				</li>
+			</c:forEach>
+		</ul>
+		<!-- 페이지 -->
+		<%-- 		<tr align="center">
+			<td colspan="7"><c:if test="${page.curPage>1}">
+					<a href="#" onclick="list('1')">[처음]</a>
+				</c:if> <c:if test="${page.curBlock>1}">
+					<a href="#" onclick="list('${page.prevPage}')">[이전]</a>
+				</c:if> <c:forEach var="num" begin="${page.blockStart}"
+					end="${page.blockEnd}">
+					<c:choose>
+						<c:when test="${num==page.curPage}">
+							<span style="color: red">${num}</span>
+						</c:when>
+						<c:otherwise>
+							<a href="#" onclick="list('${num}')">${num} </a>
+						</c:otherwise>
+					</c:choose>
+				</c:forEach> <c:if test="${page.curBlock<page.totBlock}">
+					<a href="#" onclick="list('${page.nextPage}')">[다음]</a>
+				</c:if> <c:if test="${page.curPage<page.totPage}">
+					<a href="#" onclick="list('${page.totPage}')">[마지막]</a>
+				</c:if></td>
+		</tr> --%>
+</body>
+</html>
