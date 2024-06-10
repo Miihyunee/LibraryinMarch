@@ -37,12 +37,48 @@
 
 <br>
 
-### 🖥 사용 기술 및 개발 환내
+### 🖥 사용 기술 및 개발 환경
 * OS : <img src="https://img.shields.io/badge/windows 11-0078D4?style=for-the-badge&logo=windows11&logoColor=white">
 * Front-end : <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=HTML5&logoColor=white"> <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=CSS3&logoColor=white"> <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=black">
 * Back-end : <img src="https://img.shields.io/badge/Java-34567C?style=for-the-badge&logo=Java&logoColor=white"> <img src="https://img.shields.io/badge/Oracle-F80000?style=for-the-badge&logo=Oracle&logoColor=white"> <img src="https://img.shields.io/badge/OpenJDK-000000?style=for-the-badge&logo=OpenJDK&logoColor=white">
 * Tools : <img src="https://img.shields.io/badge/Eclipse IDE-2C2255?style=for-the-badge&logo=EclipseIDE&logoColor=white">
 * Library : <img src="https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jQuery&logoColor=white"> <img src="https://img.shields.io/badge/Apache Tomcat-F8DC75?style=for-the-badge&logo=ApacheTomcat&logoColor=black"> <img src="https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge&logo=Chart.js&logoColor=white"> <img src="https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=Bootstrap&logoColor=white"> <img src="https://img.shields.io/badge/JSON-000000?style=for-the-badge&logo=JSON&logoColor=white">
+
+<br>
+
+### 👩‍💻 팀원 소개
+* [도경민](https://github.com/mindyhere)
+* 박미현🙋‍♀️
+* [양미영](https://github.com/didaldud)
+* [조연우](https://github.com/yunuyununu)
+* [홍재희](https://github.com/jh91019)
+
+![member](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/85ed98a1-3da0-481a-9fdc-317824ecd381)
+
+<br><br>
+
+## 2. 프로그램 구조
+### 🔹 ER Diagram
+![erDiagram](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/4ce6cca0-29a9-4622-9053-7c1650431234)
+
+<br>
+
+### 🔹 View
+![view](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/a5d8b2cf-63eb-4e81-b617-1d63277b5ef6)
+
+<br>
+
+### 🔹 Usecase Diagram
+![usecase](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/231b4dd7-0193-42ab-857f-9368f744c1dd)
+
+<br>
+
+### 🔹 Flow Chart
+![flow_admin](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/6850b5c1-19c7-42dc-a5aa-039ad6ceb444)
+
+![flow-user](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/8c42ac33-d93d-418c-9c4a-ea3b85f6611e)
+
+<br><br>
 
 #### 메인 화면
 ![메인](https://github.com/Miihyunee/CafeManagement/assets/151993240/4921ab99-0838-48aa-a651-23780d4722ec)
@@ -66,6 +102,7 @@
 
 <br>
 
+## 3. 페이지 기능 안
 #### 메뉴 관리
 ![메뉴](https://github.com/Miihyunee/CafeManagement/assets/151993240/beb912b2-cb2f-41b7-9ce5-21542be7896f)
 
