@@ -19,6 +19,8 @@
    - [Flow Chart](#-Flow-Chart)
 
 [3. 페이지 기능 안내](#-3.-페이지-기능-안내)
+   - [관리자 화면 <통합관리시스템>](#-관리자-화면-<통합관리시스템>)
+   - [사용자 화면 <도서관 홈페이지>](#-사용자-화면-<도서관-홈페이지>)
 
 [4. 개선사항 및 후기](#-4.-후기-및-개선점)
    - [후기](#-후기)
@@ -74,50 +76,29 @@
 <br>
 
 ### 🔹 Flow Chart
+ - 관리자 
 ![flow_admin](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/6850b5c1-19c7-42dc-a5aa-039ad6ceb444)
 
+<br>
+
+ - 사용자(회원/비회원)
 ![flow-user](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/8c42ac33-d93d-418c-9c4a-ea3b85f6611e)
 
 <br><br>
 
-#### 메인 화면
+## 3. 페이지 기능 안내
+#### 관리자 화면 <통합관리시스템>
 ![메인](https://github.com/Miihyunee/CafeManagement/assets/151993240/4921ab99-0838-48aa-a651-23780d4722ec)
 
 ![메인2](https://github.com/Miihyunee/CafeManagement/assets/151993240/a3e70056-8841-4d46-9a93-6858c4294b2c)
 
+<br>
 
-#### 매출 관리
+#### 사용자 화면 <도서관 홈페이지>
 ![매출](https://github.com/Miihyunee/CafeManagement/assets/151993240/a0f41ccb-cc85-48c7-8cee-25faa2ec7a5b)
 
 ![매출2](https://github.com/Miihyunee/CafeManagement/assets/151993240/31d64b66-b10e-401c-a1cf-d9084ef4f76b)
 
-<br>
-
-#### 재고 관리
-![재고](https://github.com/Miihyunee/CafeManagement/assets/151993240/c2a50a61-896e-44d9-9124-efb7cac550c2)
-
-![재고2](https://github.com/Miihyunee/CafeManagement/assets/151993240/6309ffe4-f69c-4773-9be9-6804903b3946)
-
-![재고3](https://github.com/Miihyunee/CafeManagement/assets/151993240/0150d483-a2d5-4dbc-a458-e4c86699f509)
-
-<br>
-
-## 3. 페이지 기능 안
-#### 메뉴 관리
-![메뉴](https://github.com/Miihyunee/CafeManagement/assets/151993240/beb912b2-cb2f-41b7-9ce5-21542be7896f)
-
-![메뉴2](https://github.com/Miihyunee/CafeManagement/assets/151993240/f1d30824-1d48-4268-9aa3-07269db49bde)
-
-![메뉴3](https://github.com/Miihyunee/CafeManagement/assets/151993240/2245a539-6879-4a75-8513-c16638701c91)
-
-![메뉴4](https://github.com/Miihyunee/CafeManagement/assets/151993240/b3842ed5-d419-4ea1-93d0-aed88d7508ad)
-
-<br>
-
-#### 회원 관리
-![회원관리1](https://github.com/Miihyunee/CafeManagement/assets/151993240/f8248701-63b3-44c0-8f61-1aa2b5f3f1bc)
-
-![회원관리2](https://github.com/Miihyunee/CafeManagement/assets/151993240/e7cdd8ef-58a2-45c0-821c-e99f62a45abc)
 
 <br><br>
 
