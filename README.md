@@ -89,16 +89,10 @@
 
 ## 3. 페이지 기능 안내
 #### 관리자 화면 <통합관리시스템>
-![메인](https://github.com/Miihyunee/CafeManagement/assets/151993240/4921ab99-0838-48aa-a651-23780d4722ec)
-
-![메인2](https://github.com/Miihyunee/CafeManagement/assets/151993240/a3e70056-8841-4d46-9a93-6858c4294b2c)
 
 <br>
 
 #### 사용자 화면 <도서관 홈페이지>
-![매출](https://github.com/Miihyunee/CafeManagement/assets/151993240/a0f41ccb-cc85-48c7-8cee-25faa2ec7a5b)
-
-![매출2](https://github.com/Miihyunee/CafeManagement/assets/151993240/31d64b66-b10e-401c-a1cf-d9084ef4f76b)
 
 
 <br><br>
