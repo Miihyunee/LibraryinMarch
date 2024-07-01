@@ -89,7 +89,28 @@
 
 ## 3. 페이지 기능 안내
 #### 관리자 화면 <통합관리시스템>
+   - 관리자 메인
+     ![관리자 메인](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/ba758fd9-9bbf-4312-8018-72ac8eb237b1)
+     ![관리자메인상세](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/5cf81a9e-5eb7-4eea-8123-22ce78910f50)
 
+<br>
+
+   - 도서목록/수정
+     ![도서수정](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/2b260718-05e8-469d-ac7f-d50f0ab87301)
+
+<br>
+
+   - 도서 등록
+     ![도서등록](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/18693b1e-85a0-4d88-948f-a18814271eeb)
+
+<br>
+
+   - 도서 대출/반납 목록
+     ![대출반납목록](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/583178a9-b1a3-4530-a40a-02d2c3c31a8a)
+
+<br>
+
+     
 <br>
 
 #### 사용자 화면 <도서관 홈페이지>
