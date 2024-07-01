@@ -149,6 +149,7 @@
      ![회원정보수정](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/211d1ef3-1a66-45cb-a6b8-d9c48095e3c3)
 
 <br>
+
    - 대출 신청
    ![대출신청](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/ff5d8a87-b5c2-48f0-bfcf-e6297228985e)
 
@@ -163,6 +164,7 @@
      ![리뷰작성](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/71a1754d-43d8-4c31-849d-71552561d934)
 
 <br>
+
    - 도서 정보 프린트
    ![인쇄](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/8c4b0806-112b-40fc-b583-40ea31d7469f)
 
