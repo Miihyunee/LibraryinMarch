@@ -172,6 +172,7 @@
      ![나의서재](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/651fc006-9b71-4ede-8b69-636f351557df)
 
 <br>
+
    - 예약 도서 취소
    ![예약취소](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/f482ded6-8c36-4931-a99f-57bed27beeac)
 
