@@ -96,6 +96,10 @@
 <br>
 
    - 도서목록/수정
+     <br>
+     : 도서번호, 도서명, 저자, 출판사, 분류별로 검색 가능
+     <br>
+     
      ![도서수정](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/2b260718-05e8-469d-ac7f-d50f0ab87301)
 
 <br>
@@ -116,6 +120,12 @@
 <br>
 
    - 도서 이용 통계
+     <br>
+      : chart.js 사용
+     <br>
+      : 차트 데이터 추출을 위해 각각의 뷰 생성
+     <br>
+     
    ![도서 통계](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/3b72d358-5239-4355-ae84-62ff7dba883b)
 
 <br><br>
@@ -131,12 +141,20 @@
      <br>
      
    - 회원가입
-     ![회원가입](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/6d207e05-4032-4e43-91f8-fa302f24cb55)
+<br>
+     : 아이디 중복 체크 기능으로 기존 사용 중인 아이디 입력 시 사용 불가 Alert 띄움
+<br>
+
+      ![회원가입](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/6d207e05-4032-4e43-91f8-fa302f24cb55)
 
 <br>
 
    - 로그인
-     ![로그인](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/64ffedd7-eca1-4656-99b2-a4d5aeb85453)
+<br>
+     : 로그인 성공 시, 입력된 아이디값을 쿠키를 활용하여 저장
+<br>
+
+      ![로그인](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/64ffedd7-eca1-4656-99b2-a4d5aeb85453)
 
 <br>
 
@@ -161,11 +179,21 @@
 <br>
 
    - 도서 리뷰 작성
+<br>
+       1) 회원 : 리뷰작성 및 본인이 작성한 게시글 삭제가능
+<br>
+      2) 관리자 : 전체 게시글에 대한 삭제권한
+<br>
+
      ![리뷰작성](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/71a1754d-43d8-4c31-849d-71552561d934)
 
 <br>
 
    - 도서 정보 프린트
+     <br>
+     : 리뷰를 제외한 도서 상세정보를 출력
+     <br>
+     
    ![인쇄](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/8c4b0806-112b-40fc-b583-40ea31d7469f)
 
 <br>
@@ -176,11 +204,23 @@
 <br>
 
    - 예약 도서 취소
+<br>
+     : 도서 예약 신청 3권으로 제한
+<br>
+
    ![예약취소](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/f482ded6-8c36-4931-a99f-57bed27beeac)
 
 <br>
 
    - 도서관 오는길
+<br>
+     1) 카카오 지도API를 활용 ▶ 지도 위에 도서관 위치를 마커로 표시
+<br>
+     2) 마커를 커스텀 하여 도서관 아이콘으로 변경
+<br>
+     3) 마커 위 도서관 이름표 클릭 시, 좌표 데이터 유지한 채 카카오맵 길찾기 창으로 이동
+<br>
+
    ![도서관오는길](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/38f83cb3-d124-4979-a2ea-9673641773f6)
 
 <br><br>
