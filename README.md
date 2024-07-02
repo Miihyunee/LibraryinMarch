@@ -137,44 +137,82 @@
 <br>
 
    - 도서 검색
+<br>
+    : 목록타입, 앨범타입의 두가지 보기형식 제공
+<br><br>
 
-     <br>
+![도서검색](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/61b6cf37-000e-49d4-bb6e-40806e6fe034)
+
+
+<br>
      
    - 회원가입
 <br>
      : 아이디 중복 체크 기능으로 기존 사용 중인 아이디 입력 시 사용 불가 Alert 띄움
-<br>
+<br><br>
 
-      ![회원가입](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/6d207e05-4032-4e43-91f8-fa302f24cb55)
+ ![회원가입](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/6d207e05-4032-4e43-91f8-fa302f24cb55)
 
 <br>
 
    - 로그인
 <br>
      : 로그인 성공 시, 입력된 아이디값을 쿠키를 활용하여 저장
-<br>
+<br><br>
 
-      ![로그인](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/64ffedd7-eca1-4656-99b2-a4d5aeb85453)
+   ![로그인](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/64ffedd7-eca1-4656-99b2-a4d5aeb85453)
 
 <br>
 
    - 비밀번호 찾기 (아이디 찾기도 동일)
+<br>
+     : 이메일 / 전화번호 중 선택하여 찾기 가능
+<br><br>
+
      ![비밀번호찾기](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/7f0f1064-1c11-4945-b3d4-571cb4a636a1)
 
 <br>
 
    - 회원정보 수정
-     ![회원정보수정](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/211d1ef3-1a66-45cb-a6b8-d9c48095e3c3)
+<br>
+     1) 회원정보 수정 : 아이디, 생년월일, 가입일을 제외한 정보 수정
+<br>
+     2) 비밀번호 확인 : 입력값에 따라 일치/불일치 표시
+<br>
+     3) 주소검색 버튼 : 주소정보누리집에서 제공하는 오픈API 활용 ▶ 입력한 주소의 상세 정보를 가져온다
+<br><br>
+
+   ![회원정보수정](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/211d1ef3-1a66-45cb-a6b8-d9c48095e3c3)
 
 <br>
 
    - 대출 신청
+<br>
+      ※ 대출 불가한 경우
+ <br>
+         1) 해당 도서가 전부 대출 중인 경우
+<br>
+         2) 대출 권한이 없는 경우
+<br>
+         3) 신청자가 이미 동일한 도서를 대출 중 인 경우
+<br>
+         4) 신청자가 일시적인 *패널티로 대출이 불가한 경우 (*연체 또는 대출가능 권수 초과)
+<br><br>
+
    ![대출신청](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/ff5d8a87-b5c2-48f0-bfcf-e6297228985e)
 
 <br>
 
    - 도서 연장 신청
-     ![대출중인도서-연장](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/677a7160-1cbb-4ea8-9c59-b8a7471f87d3)
+<br>
+     1) 반납일이 초과되었을 경우 ▶ 반납예정일을 붉은글씨 표시
+<br>
+     2) 도서제목을 마우스 오버 ▶ 밑줄, 볼드체로 표시 / 클릭 ▶ 도서 상세페이지로 이동
+<br>
+      3) 연장버튼 신청 클릭, 해당 도서에 대한 연장신청/예약 여부 확인 후 상황에 맞는 알림창
+<br><br>
+
+   ![대출중인도서-연장](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/677a7160-1cbb-4ea8-9c59-b8a7471f87d3)
 
 <br>
 
@@ -183,30 +221,40 @@
        1) 회원 : 리뷰작성 및 본인이 작성한 게시글 삭제가능
 <br>
       2) 관리자 : 전체 게시글에 대한 삭제권한
-<br>
+<br><br>
 
-     ![리뷰작성](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/71a1754d-43d8-4c31-849d-71552561d934)
+   ![리뷰작성](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/71a1754d-43d8-4c31-849d-71552561d934)
 
 <br>
 
    - 도서 정보 프린트
      <br>
      : 리뷰를 제외한 도서 상세정보를 출력
-     <br>
+     <br><br>
      
    ![인쇄](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/8c4b0806-112b-40fc-b583-40ea31d7469f)
 
 <br>
 
    - 나의 서재
-     ![나의서재](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/651fc006-9b71-4ede-8b69-636f351557df)
+<br>
+      1) 회원정보 수정 버튼 : 회원정보 수정 페이지로 이동
+<br>
+      2) 회원정보 : 회원가입 시 기입한 정보 표시 / 대출 중인 도서수와 1인당 대출 가능한 도서수 표시
+<br>
+      3) 서비스 이용현황 : 대출 중인 도서수, 예약 중인 도서수, 대출이력 도서 수 를 보여주며 클릭 시, 각 상세 페이지로 이동
+<br>      
+      4) 나의 독서 통계 : 도서 대출 데이터를 바탕으로 도서 카테고리별, 대출일자 기준 반기별/연도별 로 3가지 종류의 통계 데이터를 보여준다
+<br><br>
+
+   ![나의서재](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/651fc006-9b71-4ede-8b69-636f351557df)
 
 <br>
 
    - 예약 도서 취소
 <br>
      : 도서 예약 신청 3권으로 제한
-<br>
+<br><br>
 
    ![예약취소](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/f482ded6-8c36-4931-a99f-57bed27beeac)
 
@@ -219,7 +267,7 @@
      2) 마커를 커스텀 하여 도서관 아이콘으로 변경
 <br>
      3) 마커 위 도서관 이름표 클릭 시, 좌표 데이터 유지한 채 카카오맵 길찾기 창으로 이동
-<br>
+<br><br>
 
    ![도서관오는길](https://github.com/Miihyunee/LibraryinMarch/assets/151993240/38f83cb3-d124-4979-a2ea-9673641773f6)
 
